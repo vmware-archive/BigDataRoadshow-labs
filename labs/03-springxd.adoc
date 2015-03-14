@@ -4,7 +4,7 @@ This lab will go through a general overview using Spring XD.
 
 Requirements
 
-- Spring[http://projects.spring.io/spring-xd/] XD v1.1.0 installed 
+- http://projects.spring.io/spring-xd/[Spring XD] v1.1.0 installed 
 
 === Script 
 
