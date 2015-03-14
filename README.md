@@ -1,1 +1,32 @@
-# BigDataRoadshow
+= Pivotal Big Data Roadshow Workshop 
+
+Content for the Pivotal Cloud Platform Roadshow (http://pivotal.io/big-data/data-roadshow).
+
+== Workshop Flow
+
+The usual flow is the following:
+
+[Add agenda]
+
+The sessions are as follows:
+
+[Session description]
+
+== Contents
+
+So far this consists of:
+
+* this README
+* a link:prerequisites.adoc[prerequisites] doc
+* the link:decks[Slide Decks] (in Keynote or PPTx format)
+* the link:labs[Labs] (in adoc format)
+
+== Environment
+
+The labs are built for running on any environment with the right products installed.  
+For making it simpler and avoiding further risks, we'll deliver them leveraging
+ * Amazon AMIs [info to be linked]
+ * VM distributed as a thumb drive 
+ 
+VMs are delivered with the products installed, and labs will be cloned from this Github repo (containing instructions, scripts and small binaries / sources)
+
