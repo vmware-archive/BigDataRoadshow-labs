@@ -17,7 +17,7 @@ The sessions are as follows:
 So far this consists of:
 
 * this README
-* a link:prerequisites.adoc[prerequisites] doc
+* a link:prerequisites.adoc[prerequisites.adoc] doc
 * the link:decks[Slide Decks] (in Keynote or PPTx format)
 * the link:labs[Labs] (in adoc format)
 
