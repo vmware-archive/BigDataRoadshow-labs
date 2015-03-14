@@ -4,9 +4,9 @@ This lab will go through a general overview using Spring XD.
 
 Requirements
 
-- http://projects.spring.io/spring-xd/[Spring XD] v1.1.0 installed 
+- http://projects.spring.io/spring-xd/[Spring XD] v1.1.0 + installed 
 
-=== Script 
+=== Creating a simple stream
 
 - Init a new BOSH release:
 ----
@@ -23,65 +23,35 @@ $ tree
 $ bosh generate job postgres-server
 ----
 - Check the directory tree again 
+
+=== Transforming data
+
+- Init a new BOSH release:
 ----
-$ tree
+$ bosh init release postgres-release
 ----
-- For each job created, check the files jobs/<job_name>/spec and jobs/<job_name>/monit. In this case:
+- Check the structure created
 ----
-$ more jobs/postgres-server/spec
-$ more jobs/postgres-server/monit
+$ cd postgres-release
+$ tree  
 ----
-- Let's now create a template for starting/stopping the job. Create a file on the __templates__ directory, naming it __pgsql_ctl.erb__
-
-source for jobs/postgres-server/templates/pgsql_ctl.erb
+- Define which Jobs you'll need for your release. Understand the archutecture work behind creating a release: http://docs.cloudfoundry.org/bosh/create-release.html[BOSH documentation]
+- For each job, run from the main release directory "bosh generate job <job_name>". In this example we'll create a single job called "postgres-server"
 ----
-#!/bin/bash -e
-
-LOG_DIR=/var/vcap/sys/log/postgres-server/
-DATA_DIR=/var/vcap/jobs/postgres-server/data/
-BASE_DIR=/var/vcap/packages/postgresql/
-BINARY_DIR=$BASE_DIR/bin
-
-case $1 in
-  start)
-
-   if ! test -d $DATA_DIR; then
-      mkdir $DATA_DIR
-      sudo chown -R vcap:vcap $DATA_DIR
-      sudo chmod 700 $DATA_DIR
-
-      sudo -u vcap $BINARY_DIR/pg_ctl initdb -D $DATA_DIR -o "--auth=trust"
-
-      # enable TCP/IP connections
-      sed -i 's/#listen_addresses = 'localhost'/listen_addresses = '*'/g' $DATA_DIR/postgresql.conf
-      sed -i 's/#port = 5432/port = 5432/g' $DATA_DIR/postgresql.conf
-      echo 'host                all     all     0.0.0.0/0       trust' >>$DATA_DIR/pg_hba.conf
-
-
-   fi
-
-   sudo -u vcap $BINARY_DIR/pg_ctl start -l $LOG_DIR/server.log -D $DATA_DIR
-
-
-    ;;
-
-  stop)
-
-    sudo -u vcap $BINARY_DIR/pg_ctl stop -D $DATA_DIR -l $LOG_DIR/server.log
-
-    ;;
-
-  *)
-    echo "Usage: pgsql_ctl {start|stop}"
-
-    ;;
-
-esac
+$ bosh generate job postgres-server
 ----
+- Check the directory tree again 
 
-The instructor will discuss the contents of that file with you.
+=== Sinking to Gemfire
 
-- Now edit the __monit__ script to look like
+- Init a new BOSH release:
+----
+$ bosh init release postgres-release
+----
+- Check the structure created
+----
+$ cd postgres-release
+
 
 ----
 check process psql
@@ -91,306 +61,8 @@ check process psql
   group vcap
 ----
 
-This script is responsible for starting and stopping our job. See it references a file called __pgsql_ctl__, and that will be generated based on the template __pgsql_ctl.erb__ we already created on a previous step.
-
-- Let's now work on the  __spec__ file for that job:
-----
----
-name: postgres-server
-
-templates:
-  pgsql_ctl.erb: bin/pgsql_ctl
-
-packages:
-- postgres-package
-----
-
-That tells bosh to create a __bin/pgsql_ctl__ script based on our __pgsql_ctl.erb__ template. We could use BOSH variables in this file, and the transformations would be applied when compiling the job.
-
-At this point we should have our *job* almost completed. Install script based on sources is ready, Monit knows what to monitor and what scripts to call in order to start/stop the process, and the script to start the server is created. 
-Let's generate now the package itself, with the installer and other configurations needed in order to run this process.
-
-- Now we'll work on the package the job depends. Start by generating the __postgresql__ package:
-----
-$ bosh generate package postgresql
-----
-- Now check the __spec__ and __packaging__ scripts for the package created. Change the __spec__ file to include the PostgreSQL sources we'll use to compile the package:
-----
----
-name: postgresql
-
-dependencies:
-
-files:
-- postgresql-9.3.5.tar.gz  # from http://www.postgresql.org/ftp/source/v9.3.5/
-----
-Note: Download the file indicated above and place it under the __src__ directory. BOSH will look for that file under __src__ and __blobs__.
-
-- Now edit the __packaging__ script for that package to install the sources:
-----
-# abort script on any command that exits with a non zero value
-set -e
-
-tar zxvf postgresql-9.3.5.tar.gz
-pushd postgresql-9.3.5
-  # need to run as root?
-  sudo su -
-  ./configure --prefix=${BOSH_INSTALL_TARGET}
-
-  gmake
-  gmake install
-popd
-
-# post-install procedures
-LD_LIBRARY_PATH=/usr/local/pgsql/lib
-export LD_LIBRARY_PATH
-----
-
-- Although we don't have blobs for this release (we're providing everything needed as source), it's mandatory to configure a blobstore, so we'll do a dummy config.
-Create the file __config/final.yml__ and paste the following:
-----
----
-final_name: cf-postgres
-min_cli_version: 1.5.0.pre.1142
-blobstore:
-  provider: local
-  options:
-    blobstore_path: /tmp/postgres-blobs
-----
 
 
-That should be all for the package.
-
-- Build the dev release:
-----
-$ bosh create release --force
-----
-
-you should see an output like this:
-----
-FredericosAir8:postgres-release fmelo$ bosh create release --force
-Syncing blobs...
-
-Building DEV release
----------------------------------
-
-Building packages
------------------
-
-Building postgresql...
-  Final version:   NOT FOUND
-  Dev version:     FOUND LOCAL
-
-
-Resolving dependencies
-----------------------
-Dependencies resolved, correct build order is:
-- postgresql
-
-
-Building jobs
--------------
-Building postgres-server...
-  Final version:   NOT FOUND
-  Dev version:     NOT FOUND
-  Generating...
-  Generated version e922a84539460a018fe1a4e6fecefe6895cb84f8
-
-
-Building release
-----------------
-
-Generating manifest...
-----------------------
-Writing manifest...
-
-Release summary
----------------
-Packages
-+-------------------+------------------------------------------+-------+
-| Name              | Version                                  | Notes |
-+-------------------+------------------------------------------+-------+
-| postgresql        | 93f286ed14b430c95752058362625bab41e2308c |       |
-+-------------------+------------------------------------------+-------+
-
-Jobs
-+-----------------+------------------------------------------+-------------+
-| Name            | Version                                  | Notes       |
-+-----------------+------------------------------------------+-------------+
-| postgres-server | e922a84539460a018fe1a4e6fecefe6895cb84f8 | new version |
-+-----------------+------------------------------------------+-------------+
-
-Jobs affected by changes in this release
-+-----------------+------------------------------------------+
-| Name            | Version                                  |
-+-----------------+------------------------------------------+
-| postgres-server | e922a84539460a018fe1a4e6fecefe6895cb84f8 |
-+-----------------+------------------------------------------+
-
-Release version: 0+dev.1
-Release manifest: /Users/fmelo/postgres-release/dev_releases/cf-postgres-0+dev.1.yml
-----
-
-Now we should be able to do our first test with our release.
-
-- Download the latest CentOS Stemcell for vSphere:
-----
-FredericosAir8:postgres-release fmelo$ bosh public stemcells
-+-----------------------------------------------------------------+
-| Name                                                            |
-+-----------------------------------------------------------------+
-| bosh-stemcell-2427-aws-xen-ubuntu.tgz                           |
-| bosh-stemcell-2652-aws-xen-centos.tgz                           |
-| bosh-stemcell-2776-aws-xen-centos-go_agent.tgz                  |
-| bosh-stemcell-2427-aws-xen-ubuntu-go_agent.tgz                  |
-| bosh-stemcell-2710-aws-xen-ubuntu-lucid-go_agent.tgz            |
-| bosh-stemcell-2652-aws-xen-ubuntu-lucid.tgz                     |
-| bosh-stemcell-2776-aws-xen-ubuntu-trusty-go_agent.tgz           |
-| bosh-stemcell-2690.6-aws-xen-ubuntu-trusty-go_agent.tgz         |
-| bosh-stemcell-2719.1-aws-xen-centos-go_agent.tgz                |
-| bosh-stemcell-2719.1-aws-xen-ubuntu-trusty-go_agent.tgz         |
-| bosh-stemcell-2719.2-aws-xen-centos-go_agent.tgz                |
-| bosh-stemcell-2719.2-aws-xen-ubuntu-trusty-go_agent.tgz         |
-| bosh-stemcell-2719.3-aws-xen-ubuntu-trusty-go_agent.tgz         |
-| light-bosh-stemcell-2427-aws-xen-ubuntu.tgz                     |
-| light-bosh-stemcell-2652-aws-xen-centos.tgz                     |
-| light-bosh-stemcell-2776-aws-xen-centos-go_agent.tgz            |
-| light-bosh-stemcell-2427-aws-xen-ubuntu-go_agent.tgz            |
-| light-bosh-stemcell-2710-aws-xen-ubuntu-lucid-go_agent.tgz      |
-| light-bosh-stemcell-2652-aws-xen-ubuntu-lucid.tgz               |
-| light-bosh-stemcell-2776-aws-xen-ubuntu-trusty-go_agent.tgz     |
-| light-bosh-stemcell-2690.6-aws-xen-ubuntu-trusty-go_agent.tgz   |
-| light-bosh-stemcell-2719.1-aws-xen-centos-go_agent.tgz          |
-| light-bosh-stemcell-2719.1-aws-xen-ubuntu-trusty-go_agent.tgz   |
-| light-bosh-stemcell-2719.2-aws-xen-centos-go_agent.tgz          |
-| light-bosh-stemcell-2719.2-aws-xen-ubuntu-trusty-go_agent.tgz   |
-| light-bosh-stemcell-2719.3-aws-xen-ubuntu-trusty-go_agent.tgz   |
-| light-bosh-stemcell-2776-aws-xen-hvm-centos-go_agent.tgz        |
-| light-bosh-stemcell-2776-aws-xen-hvm-ubuntu-trusty-go_agent.tgz |
-| bosh-stemcell-2427-openstack-kvm-ubuntu.tgz                     |
-| bosh-stemcell-2624-openstack-kvm-centos.tgz                     |
-| bosh-stemcell-2624-openstack-kvm-ubuntu-lucid.tgz               |
-| bosh-stemcell-2776-openstack-kvm-centos-go_agent.tgz            |
-| bosh-stemcell-2776-openstack-kvm-ubuntu-trusty-go_agent.tgz     |
-| bosh-stemcell-2652-openstack-kvm-ubuntu-lucid-go_agent.tgz      |
-| bosh-stemcell-2719.1-openstack-kvm-centos-go_agent.tgz          |
-| bosh-stemcell-2719.1-openstack-kvm-ubuntu-trusty-go_agent.tgz   |
-| bosh-stemcell-2719.2-openstack-kvm-centos-go_agent.tgz          |
-| bosh-stemcell-2719.2-openstack-kvm-ubuntu-trusty-go_agent.tgz   |
-| bosh-stemcell-2719.3-openstack-kvm-ubuntu-trusty-go_agent.tgz   |
-| bosh-stemcell-2427-vcloud-esxi-ubuntu.tgz                       |
-| bosh-stemcell-2652-vcloud-esxi-ubuntu-lucid.tgz                 |
-| bosh-stemcell-2732-vcloud-esxi-ubuntu-trusty-go_agent.tgz       |
-| bosh-stemcell-2690.5-vcloud-esxi-ubuntu-trusty-go_agent.tgz     |
-| bosh-stemcell-2690.6-vcloud-esxi-ubuntu-trusty-go_agent.tgz     |
-| bosh-stemcell-2710-vcloud-esxi-ubuntu-lucid-go_agent.tgz        |
-| bosh-stemcell-2427-vsphere-esxi-ubuntu.tgz                      |
-| bosh-stemcell-2624-vsphere-esxi-centos.tgz                      |
-| bosh-stemcell-2776-vsphere-esxi-centos-go_agent.tgz             |
-| bosh-stemcell-2427-vsphere-esxi-ubuntu-go_agent.tgz             |
-| bosh-stemcell-2710-vsphere-esxi-ubuntu-lucid-go_agent.tgz       |
-| bosh-stemcell-2624-vsphere-esxi-ubuntu-lucid.tgz                |
-| bosh-stemcell-2776-vsphere-esxi-ubuntu-trusty-go_agent.tgz      |
-| bosh-stemcell-2719.1-vsphere-esxi-centos-go_agent.tgz           |
-| bosh-stemcell-2719.1-vsphere-esxi-ubuntu-trusty-go_agent.tgz    |
-| bosh-stemcell-2719.2-vsphere-esxi-ubuntu-trusty-go_agent.tgz    |
-| bosh-stemcell-2719.2-vsphere-esxi-centos-go_agent.tgz           |
-| bosh-stemcell-2719.3-vsphere-esxi-ubuntu-trusty-go_agent.tgz    |
-| bosh-stemcell-2690.6-vsphere-esxi-ubuntu-trusty-go_agent.tgz    |
-| bosh-stemcell-389-warden-boshlite-ubuntu-trusty-go_agent.tgz    |
-| bosh-stemcell-53-warden-boshlite-ubuntu.tgz                     |
-| bosh-stemcell-389-warden-boshlite-centos-go_agent.tgz           |
-| bosh-stemcell-64-warden-boshlite-ubuntu-lucid-go_agent.tgz      |
-+-----------------------------------------------------------------+
-
-FredericosAir8:postgres-release fmelo$ bosh download public stemcell bosh-stemcell-2776-vsphere-esxi-centos-go_agent.tgz
-bosh-stemcell: 100% |oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo| 572.2MB   1.7MB/s Time: 00:05:43
-Download complete
-
-----
-
-- Create a manifest file called __postgres.yml__. An example is shown below. Replace the IaaS properties with the right ones from the environment you'll be testing to.
-
-----
----
-name: postgres
-director_uuid: 64e354b9-b4c3-4cce-a239-bcbcd5a2ea69 #replace with your director UUID
-release:
-  name: cf-postgres
-  version: latest
-
-compilation:
-  workers: 2
-  cloud_properties:
-    ram: 8192
-    disk: 8096
-    cpu: 4
-  network: default
-  reuse_compilation_vms: true
-
-update:
-  canaries: 1
-  canary_watch_time: 3000 - 180000
-  update_watch_time: 3000 - 180000
-  max_in_flight: 2
-  max_errors: 1
-  
-networks:
- - name: default
-   subnets:
-   - range: 10.68.40.0/24
-     gateway: 10.68.40.1
-     dns:
-     - 10.103.42.51
-     static:
-     - 10.68.40.201
-     - 10.68.40.202
-     - 10.68.40.203
-     reserved:
-     - 10.68.40.1-10.68.40.200
-     cloud_properties:
-      name : PCF
-
-resource_pools:
- - name: rp1
-   network: default
-   stemcell:
-    name: bosh-vsphere-esxi-centos-go_agent
-    version: 2776
-   cloud_properties:
-    ram: 16500
-    disk: 4096
-    cpu: 2
-  
-jobs:
- - name: postgres-server
-   template: postgres-server
-   instances: 1
-   resource_pool: rp1
-   persistent_disk: 4096
-   properties:
-     host: 10.68.40.201
-   networks:
-   - name: default
-     static_ips:
-     - 10.68.40.201
-  
-----
-
-hint:  find the Bosh Director UUID to target with __bosh status --uuid__
-
-When in doubt, you can always check the deployment manifest reference http://docs.cloudfoundry.org/bosh/deployment-manifest.html[here]
-
-- Test the release:
-
-----
-$ bosh target <bosh director target>
-$ bosh login
-$ bosh upload stemcell bosh-stemcell-2776-vsphere-esxi-centos-go_agent.tgz
-$ bosh upload release 
-$ bosh deployment postgres.yml
-$ bosh deploy
-----
 
 Troubleshoot any issues until you have your first custom bosh release deployment!! (there are some corrections to be done!) The troubleshooting part is very important!! That's how you learn!!
 
