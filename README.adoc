@@ -6,11 +6,11 @@ Content for the Pivotal Cloud Platform Roadshow (http://pivotal.io/big-data/data
 
 The usual flow is the following:
 
-[Add agenda]
+TODO: Add agenda
 
 The sessions are as follows:
 
-[Session description]
+TODO: Sessions description
 
 == Contents
 
