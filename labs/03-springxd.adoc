@@ -71,7 +71,7 @@ The list should be empty, meaning no streams currently exist.
 
 Let's start creating a few very simple data streams that will simply read data from different sources and directly output to select destinations. 
 
-. Reading the system's time and outputing to the log:
+* Reading the system's time and outputing to the log:
 
 On the XD shell window, type:
 
@@ -81,9 +81,9 @@ xd:> stream create stream1 --definition "time | log" --deploy
 Created and deployed new stream 'stream1'
 ----
 Check the logs on the window where you started __xd-singlenode__. It should be outputing time ticks. +
- +
-. Reading the system's time and outputing to a file:
- +
+ 
+* Reading the system's time and outputing to a file:
+ 
 [source,bash]
 ----
 xd:>stream create streamTimeFile --definition "time | file --name=/tmp/mystream" --deploy
@@ -100,18 +100,18 @@ $ tail -f /tmp/mystream.out
 (...)
 ----
 
-. Listening HTTP port and outputing to a file
+* Listening HTTP port and outputing to a file
 
 
 
-
-
-
-
-
-
-
-
++
++
++
++
++
++
++
++
 
 
 
