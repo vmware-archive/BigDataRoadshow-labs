@@ -1,15 +1,123 @@
 == Spring XD overview lab
 
-This lab will go through a general overview using Spring XD.
+This lab will go through a general overview using Spring XD. +
+For lab and demo purposes, we'll be using a single node system, although Spring XD will scale horizontally as needed.
 
 Requirements
 
 - http://projects.spring.io/spring-xd/[Spring XD] v1.1.0 + installed 
 
+=== Starting Spring XD
+
+Start a single node instance of Spring XD, typing on a terminal:
+
+[source,bash]
+----
+$ xd-singlenode
+
+ _____                           __   _______
+/  ___|          (-)             \ \ / /  _  \
+\ `--. _ __  _ __ _ _ __   __ _   \ V /| | | |
+ `--. \ '_ \| '__| | '_ \ / _` |  / ^ \| | | |
+/\__/ / |_) | |  | | | | | (_| | / / \ \ |/ /
+\____/| .__/|_|  |_|_| |_|\__, | \/   \/___/
+      | |                  __/ |
+      |_|                 |___/
+1.1.0.RELEASE                    eXtreme Data
+
+
+Started : SingleNodeApplication
+
+(...)
+
+1.1.0.RELEASE  INFO DeploymentSupervisor-0 server.ContainerListener - Container arrived: Container{name='9b736207-17df-4ba8-bfb7-8f68a14ab466', attributes={ip=192.168.1.2, host=Fredericos-Air, groups=, pid=9011, id=9b736207-17df-4ba8-bfb7-8f68a14ab466}}
+1.1.0.RELEASE  INFO DeploymentSupervisor-0 server.ContainerListener - Scheduling deployments to new container(s) in 15000 ms
+----
+Wait for the server startup to be complete, it will take a few seconds. +
+Once the server is up and running, let's connect to it from the XD Shell:
+
+[source,bash]
+----
+$ xd-shell
+
+ _____                           __   _______
+/  ___|          (-)             \ \ / /  _  \
+\ `--. _ __  _ __ _ _ __   __ _   \ V /| | | |
+ `--. \ '_ \| '__| | '_ \ / _` |  / ^ \| | | |
+/\__/ / |_) | |  | | | | | (_| | / / \ \ |/ /
+\____/| .__/|_|  |_|_| |_|\__, | \/   \/___/
+      | |                  __/ |
+      |_|                 |___/
+eXtreme Data
+1.1.0.RELEASE | Admin Server Target: http://localhost:9393
+Welcome to the Spring XD shell. For assistance hit TAB or type "help".
+xd:>
+----
+
+As the server is running on the same machine, the XD Shell automatically recognized it and connected. +
+We're ready to create our first streams.
+
+First, let's check no stream is currently running:
+
+[source,bash]
+----
+xd:> stream list
+  Stream Name  Stream Definition  Status
+  -----------  -----------------  ------
+----
+The list should be empty, meaning no streams currently exist.
+
+=== Creating a few simple streams
+
+Let's start creating a few very simple data streams that will simply read data from different sources and directly output to select destinations. 
+
+. Reading the system's time and outputing to the log:
+
+On the XD shell window, type:
+
+[source,bash]
+----
+xd:> stream create stream1 --definition "time | log" --deploy
+Created and deployed new stream 'stream1'
+----
+Check the logs on the window where you started __xd-singlenode__. It should be outputing time ticks. +
+ +
+. Reading the system's time and outputing to a file:
+ +
+[source,bash]
+----
+xd:>stream create streamTimeFile --definition "time | file --name=/tmp/mystream" --deploy
+Created and deployed new stream 'streamTimeFile'
+----
+
+Check the log file on a terminal window and see the time is now being output there: +
+ +
+[source,bash]
+----
+$ tail -f /tmp/mystream.out
+2015-03-13 23:38:19
+2015-03-13 23:38:20
+(...)
+----
+
+. Listening HTTP port and outputing to a file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 * Come back to bosh and check the deployment is still there --> BOSH and Ops Manager are out of sync. 
 . SSH to the VMs and see running processes. Check monit logs and rabbit logs. Try to understand what’s wrong
 
-=== Creating a simple stream
 
 - Init a new BOSH release:
 
