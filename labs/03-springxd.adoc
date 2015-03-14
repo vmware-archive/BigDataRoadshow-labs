@@ -6,13 +6,47 @@ Requirements
 
 - http://projects.spring.io/spring-xd/[Spring XD] v1.1.0 + installed 
 
+* Come back to bosh and check the deployment is still there --> BOSH and Ops Manager are out of sync. 
+. SSH to the VMs and see running processes. Check monit logs and rabbit logs. Try to understand what’s wrong
+
 === Creating a simple stream
 
 - Init a new BOSH release:
+
++
+[source,bash]
 ----
 $ bosh init release postgres-release
 ----
-- Check the structure created
+. We'll add a *framework* component that will set a Java system property containing a timestamp that indicates when the application was staged. To do that, first create +java-buildpack/lib/java_buildpack/framework/staging_timestamp.rb+ and add the following contents:
++
+[source,ruby]
+----
+require 'java_buildpack/framework'
+
+module JavaBuildpack::Framework
+
+  # Adds a system property containing a timestamp of when the application was staged.
+  class StagingTimestamp < JavaBuildpack::Component::BaseComponent
+    def initialize(context)
+      super(context)
+    end
+
+    def detect
+      'staging-timestamp'
+    end
+
+    def compile
+    end
+
+    def release
+      @droplet.java_opts.add_system_property('staging.timestamp', "'#{Time.now}'")
+    end
+  end
+end
+----
+
+
 ----
 $ cd postgres-release
 $ tree  
