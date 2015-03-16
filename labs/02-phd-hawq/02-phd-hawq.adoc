@@ -1,0 +1,26 @@
+== PHD/HAWQ overview lab
+
+This lab will go through a general overview of using PHD and HAWQ. +
+For lab and demo purposes, we'll be using a single node Hadoop and HAWQ installation, these will scale horizontally as needed.
+
+Requirements
+
+- PHD+HAWQ SingleNode installation ( available at network.pivotal.io )
+
+=== Starting PHD & HAWQ
+
+as gpadmin
+
+from the desktop click start_all.sh
+
+or 
+
+from command line run
+bash ~/Desktop/start_all.sh
+
+Wait for the cluster start process to finish
+Once the cluster is up and running you should be able to query hdfs via the command line
+
+hdfs dfs -ls /
+
+
