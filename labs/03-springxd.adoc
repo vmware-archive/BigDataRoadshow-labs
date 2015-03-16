@@ -102,8 +102,19 @@ $ tail -f /tmp/mystream.out
 
 * Listening HTTP port and outputing to a file
 
+* Listening HTTP port and outputing to HDFS
 
+xd:>hadoop config fs --namenode hdfs://localhost:8020
 
+xd:>hadoop config fs --namenode hdfs://localhost:8020
+
+xd:> stream create --name myhdfsstream1 --definition "http | hdfs" --deploy
+
+xd:>hadoop fs ls /xd/myhdfsstream1
+Found 1 items
+-rw-r--r--   3 jvalkealahti supergroup          0 2013-12-18 18:10 /xd/myhdfsstream1/myhdfsstream1-0.txt.tmp
+
++
 +
 +
 +
@@ -111,96 +122,111 @@ $ tail -f /tmp/mystream.out
 +
 +
 +
-+
 
 
+=== Applying a simple Data Filtering / Transformation
 
-* Come back to bosh and check the deployment is still there --> BOSH and Ops Manager are out of sync. 
-. SSH to the VMs and see running processes. Check monit logs and rabbit logs. Try to understand what’s wrong
+For this example, we'll use Yahoo Query Language (YQL) REST interface to query quotes from our favorite stock.
 
+Using our browser, open https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quote%20where%20symbol%20in%20(%22EMC%22)&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&format=json
 
-- Init a new BOSH release:
+{"query":
+     {"count":1,"created":"2015-03-16T07:05:57Z",
+      "lang":"en-US",
+      "results":{
+          "quote":{
+              "symbol":"EMC",
+              "AverageDailyVolume":
+              "15112500",
+              "Change":"-0.17",
+              "DaysLow":"25.49",
+              "DaysHigh":"26.08",
+              "YearLow":"24.92",
+              "YearHigh":"30.92",
+              "MarketCapitalization":"51.69B",
+              "LastTradePriceOnly":"26.00",
+              "DaysRange":"25.49 - 26.08",
+              "Name":"EMC Corporation Common Stock",
+              "Symbol":"EMC",
+              "Volume":"18974738",
+              "StockExchange":"NYQ"
+            }
+         }
+       }
+  }
 
-+
-[source,bash]
+Note the response in JSON format. We can query the same data at each 3 seconds and output the result to XD's log file creating the stream:
+
+[source,shell]
 ----
-$ bosh init release postgres-release
-----
-. We'll add a *framework* component that will set a Java system property containing a timestamp that indicates when the application was staged. To do that, first create +java-buildpack/lib/java_buildpack/framework/staging_timestamp.rb+ and add the following contents:
-+
-[source,ruby]
-----
-require 'java_buildpack/framework'
-
-module JavaBuildpack::Framework
-
-  # Adds a system property containing a timestamp of when the application was staged.
-  class StagingTimestamp < JavaBuildpack::Component::BaseComponent
-    def initialize(context)
-      super(context)
-    end
-
-    def detect
-      'staging-timestamp'
-    end
-
-    def compile
-    end
-
-    def release
-      @droplet.java_opts.add_system_property('staging.timestamp', "'#{Time.now}'")
-    end
-  end
-end
+xd:> stream create stream1 --definition "trigger --fixedDelay=10 | http-client --url='''https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quote where symbol in (\"MSFT\")&format=json&env=store://datatables.org/alltableswithkeys''' --httpMethod=GET | log" --deploy 
 ----
 
+However, we're only interested on the *results* object of the json response, more specifically the *results.quote* object.
 
-----
-$ cd postgres-release
-$ tree  
-----
-- Define which Jobs you'll need for your release. Understand the archutecture work behind creating a release: http://docs.cloudfoundry.org/bosh/create-release.html[BOSH documentation]
-- For each job, run from the main release directory "bosh generate job <job_name>". In this example we'll create a single job called "postgres-server"
-----
-$ bosh generate job postgres-server
-----
-- Check the directory tree again 
+So let's apply add quick filtering to only have that part of the result:  +splitter --expression=#jsonPath(payload,'$.query.results.quote')+ 
 
-=== Transforming data
+[source,shell]
+----
+xd:> stream create stream1 --definition "trigger --fixedDelay=10 | http-client --url='''https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quote where symbol in (\"MSFT\")&format=json&env=store://datatables.org/alltableswithkeys''' --httpMethod=GET | splitter --expression=#jsonPath(payload,'$.query.results.quote') | log" --deploy 
+----
 
-- Init a new BOSH release:
-----
-$ bosh init release postgres-release
-----
-- Check the structure created
-----
-$ cd postgres-release
-$ tree  
-----
-- Define which Jobs you'll need for your release. Understand the archutecture work behind creating a release: http://docs.cloudfoundry.org/bosh/create-release.html[BOSH documentation]
-- For each job, run from the main release directory "bosh generate job <job_name>". In this example we'll create a single job called "postgres-server"
-----
-$ bosh generate job postgres-server
-----
-- Check the directory tree again 
+You should see in the log only the stock quote data, eliminating all the header we were not interested on.
 
-=== Sinking to Gemfire
+=== Enriching with a simple Groovy script
 
-- Init a new BOSH release:
+Create a file called __transform.groovy__  as following:
+
+[source,groovy]
 ----
-$ bosh init release postgres-release
+payload.put("timestamp", headers.get('timestamp'))
+return payload
 ----
-- Check the structure created
+
+Those simple two lines will be responsible for adding the timestamp of the message to the JSON object containing the quote, as we'll use that to store in our in-memory grid.
+To verify the result, use the stream:
+
+[source,shell]
 ----
-$ cd postgres-release
+xd:> stream create stream1 --definition "trigger --fixedDelay=10 | http-client --url='''https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quote where symbol in (\"MSFT\")&format=json&env=store://datatables.org/alltableswithkeys''' --httpMethod=GET | splitter --expression=#jsonPath(payload,'$.query.results.quote') |  transform --script='file:[path_to_your_file]/transform.groovy' | log" --deploy 
+----
+
+=== Sinking the data into GemFire
+
+Start a GemFire server:
+
+[source,shell]
+----
+$ gfsh
+
+gfsh$ 
+
+BLA BLA BLA
+----
+
+Create a region called Stocks to hold the information Spring XD will be sinking there:
+
+[source,shell]
+----
+gfsh $ create region 
+
+BLA BLA BLA
+----
 
 
+Create the Spring XD stream that outputs the data already filtered and enriched into GemFire:
+
+[source,shell]
 ----
-check process psql
-  with pidfile /var/vcap/jobs/postgres-server/data/postmaster.pid
-  start program "/var/vcap/jobs/postgres-server/bin/pgsql_ctl start" with timeout 600 seconds
-  stop program "/var/vcap/jobs/postgres-server/bin/pgsql_ctl stop"
-  group vcap
+stream create stream1 --definition "trigger --fixedDelay=3 | http-client --url='''https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quote where symbol in (\"MSFT\")&format=json&env=store://datatables.org/alltableswithkeys''' --httpMethod=GET | splitter --expression=#jsonPath(payload,'$.query.results.quote') | transform --script='file:/Users/fmelo/FinanceStream/transform.groovy'| gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=Stocks --keyExpression=payload.getField('timestamp')" --deploy
+----
+
+
+=== Creating a second stream to read data from GemFire 
+
+[source,shell]
+----
+stream create stream2 --definition "gemfire --regionName=Stocks --useLocator=true --host=localhost --port=10334 | shell --command='Rscript /Users/fmelo/FinanceStream/test.R' | log " --deploy
 ----
 
 
