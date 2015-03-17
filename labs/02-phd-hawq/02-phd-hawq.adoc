@@ -21,6 +21,66 @@ bash ~/Desktop/start_all.sh
 Wait for the cluster start process to finish
 Once the cluster is up and running you should be able to query hdfs via the command line
 
+=== Accessing Hadoop (HDFS)
+
+open a terminal and from the command line run
+
 hdfs dfs -ls /
+
+for the labs we need to create a diretory to put data
+
+hdfs dfs --mkdir /user/sample
+
+verify that the directory was created
+
+hdfs dfs -ls /user/
+
+=== Loading data into HDFS
+
+cd /home/gpadmin/Labs/PHDHAWQ/
+
+ls -l
+
+you should a set of sql scripts and a sample.csv data file
+
+now put a copy of the file into HDFS
+
+hdfs dfs -put sample.csv /user/sample/
+
+check to see if the data was loaded
+
+hdfs dfs -ls /user/sample
+
+hdfs dfs -tail /user/sample/sample.csv
+
+=== Using HAWQ
+
+Looks at the structure in HDFS for HAWQ
+
+hdfs dfs -ls -R /hawq_data
+
+==== Create external table
+
+Create and external table definition that points through to the csv data in HDFS
+
+psql -f 1_create_ext_table.sql
+
+==== Create internal table
+
+Create a table internal to HAWQ so we can pull the data directly into HAWQ for faster access
+
+psql -f 2_create_hawq_table.sql
+
+==== Load HAWQ Table
+
+Load the data from the external table into the internal table
+
+psql -f 3_load_hawq_table.sql
+
+==== Execute queries against table
+
+Execute a query against the external table as well as against the internal table
+
+psql -f 4_rpm_bands.sql
 
 

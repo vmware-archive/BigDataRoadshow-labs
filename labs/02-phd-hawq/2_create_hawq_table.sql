@@ -1,6 +1,10 @@
 ﻿-- 1. Create table in HAWQ that will house the data
+\timing
 
+\echo ensuring the internal table does not exist
 drop table if exists stage.car_sample_data;
+
+\echo creating interal table
 create table stage.car_sample_data (
  time timestamp,
  vehicleSpeed numeric,
@@ -127,5 +131,5 @@ create table stage.car_sample_data (
  gpsSpeed numeric,
  gpsAccuracy numeric
  )
-WITH (appendonly=true, compresstype=quicklz)
+WITH (appendonly=true)
 DISTRIBUTED RANDOMLY;

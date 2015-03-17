@@ -1,6 +1,10 @@
 ﻿-- 1. Create external table definition to point to hdfs staging location
+\timing
 
+\echo ensuring external table is dropped
 drop external table if exists stage.car_sample_data_ext;
+
+\echo creating external table
 create external table stage.car_sample_data_ext (
  time timestamp,
  vehicleSpeed numeric,

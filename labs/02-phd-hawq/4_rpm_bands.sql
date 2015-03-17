@@ -1,5 +1,6 @@
 --4 Analyze engine rpm in 5% chunks
 \timing
+\echo summarizing statistics out of external table
 SELECT MIN(enginerpm)::int, 
        AVG(enginerpm)::int,
        MEDIAN(enginerpm)::int,
@@ -12,6 +13,7 @@ FROM (
 GROUP BY band 
 ORDER BY band;
 
+\echo summarizing statistics out of internal table
 SELECT MIN(enginerpm)::int, 
        AVG(enginerpm)::int,
        MEDIAN(enginerpm)::int,
