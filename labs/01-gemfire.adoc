@@ -1,0 +1,4 @@
+note:  please start gemfire with option -Dgemfire.http-service-port=7575  for avoiding conflict with port 7070 being used by PHD
+----
+gfsh> start locator --name=locator1 --J=-Dgemfire.http-service-port=7575
+----
