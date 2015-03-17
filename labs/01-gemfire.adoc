@@ -2,3 +2,16 @@ note:  please start gemfire with option -Dgemfire.http-service-port=7575  for av
 ----
 gfsh> start locator --name=locator1 --J=-Dgemfire.http-service-port=7575
 ----
+
+Start a server with this command
+
+Start a second server with this command
+
+Connect to the locator with gfsh
+
+List the members
+
+Create a region
+
+
+
