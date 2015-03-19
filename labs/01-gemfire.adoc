@@ -6,8 +6,8 @@ The purpose of this lab is to get a basic understanding of how a Gemfire cluster
 gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes +
 Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster
 To start gfsh execute the following steps: +
-.Right click on the desktop and select _Open In Terminal_
-.In the terminal type "'gfsh'"
+1. Right click on the desktop and select _Open In Terminal_
+2. In the terminal type "'gfsh'"
 
 The following interface will appear:
 ****
