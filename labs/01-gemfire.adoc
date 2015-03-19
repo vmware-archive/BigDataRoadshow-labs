@@ -21,8 +21,7 @@ Monitor and Manage GemFire
 gfsh>
 ****
 
-gfsh is interactive and contains auto completes to assist users. This functionality can be triggered by pressing the tab key. +
-Press tab now to list all the commands gfsh can perform.
+gfsh is interactive and contains auto completes to assist users. This functionality can be triggered by pressing the tab key. Press tab now to list all the commands gfsh can perform.
 
 == Starting The First Member of the Cluster
 The locator is a Pivotal GemFire process that tells new, connecting members/clients where running members are located and provides load balancing for server use
