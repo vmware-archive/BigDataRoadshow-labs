@@ -30,7 +30,6 @@ Copy and paste the following command into gfsh: +
 _start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575_ +
 
 The command will produce an output similar to this: +
-
 ****
 _gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
 Starting a GemFire Locator in /home/gemfire/locatorA...
@@ -45,7 +44,6 @@ Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/
 
 Successfully connected to: [host=192.168.75.9, port=1099]
 ****
-+
 Congratulations, you now have the beginning of a Gemfire cluster.
 
 == Log Into Pulse
