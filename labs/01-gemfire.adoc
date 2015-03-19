@@ -10,6 +10,7 @@ To start gfsh execute the following steps: +
 . In the terminal type "'gfsh'"
 
 The following interface will appear:
+****
     _________________________     __
    / _____/ ______/ ______/ /____/ /
   / /  __/ /___  /_____  / _____  / 
@@ -18,6 +19,7 @@ The following interface will appear:
 
 Monitor and Manage GemFire
 gfsh>
+****
 
 gfsh is interactive and contains auto completes to assist users. This functionality can be triggered by pressing the tab key. +
 Press tab now to list all the commands gfsh can perform.
