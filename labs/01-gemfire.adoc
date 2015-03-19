@@ -1,17 +1,78 @@
-note:  please start gemfire with option -Dgemfire.http-service-port=7575  for avoiding conflict with port 7070 being used by PHD
-----
-gfsh> start locator --name=locator1 --J=-Dgemfire.http-service-port=7575
-----
 
-Start a server with this command
+= Gemfire Lab
+== Exploring gfsh
+gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes +
+Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster
+To start gfsh execute the following steps: +
+. Right click on the desktop and select _Open In Terminal_
+. In the terminal type "'gfsh'"
 
-Start a second server with this command
+The following interface will appear:
+    _________________________     __
+   / _____/ ______/ ______/ /____/ /
+  / /  __/ /___  /_____  / _____  / 
+ / /__/ / ____/  _____/ / /    / /  
+/______/_/      /______/_/    /_/    v8.1.0
 
-Connect to the locator with gfsh
+Monitor and Manage GemFire
+gfsh>
 
-List the members
+gfsh is interactive and contains auto completes to assist users. This functionality can be triggered by pressing the tab key. +
+Press tab now to list all the commands gfsh can perform.
 
-Create a region
+== Starting The First Member of the Cluster
+The locator is a Pivotal GemFire process that tells new, connecting members/clients where running members are located and provides load balancing for server use
+This locator will be the first member in the cluster and will act as the membership coordinator as well as the management node +
+Copy and paste the following command into gfsh:
+_start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575_
+
+The command will produce an output similar to this:
+****
+gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
+Starting a GemFire Locator in /home/gemfire/locatorA...
+Locator in /home/gemfire/locatorA on 192.168.75.9[10334] as locatorA is currently online.
+Process ID: 67956
+Uptime: 16 seconds
+GemFire Version: 8.1.0
+Java Version: 1.7.0_71
+Log File: /home/gemfire/locatorA/locatorA.log
+JVM Arguments: -Dgemfire.enable-cluster-configuration=false -Dgemfire.load-cluster-configuration-from-dir=false -Dgemfire.log-level=config -Xms64m -Xmx64m -Dgemfire.http-service-port=7575 -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
+Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/locator-dependencies.jar
+
+Successfully connected to: [host=192.168.75.9, port=1099]
+****
+Congratulations, you now have the beginning of a Gemfire cluster.
+
+== Log Into Pulse
+GemFire Pulse is a Web Application that provides a graphical dashboard for monitoring vital, real-time health and performance of GemFire clusters, members, and regions +
+With the first locator started, Pulse is now available.
+
+To start up Pulse, open a browser and enter this URL in the address bar:
+http://localhost:7575/pulse/Login.html
+Log In with the following credentials
+username:admin
+password:admin
+Once logged in click on green server box Icon in the Cluster View to see the Gemfire processes running on the server. +
+For the lab all processes will be on this machine.
+
+==Start another Locator
+This locator will join with the first giving us fail over for Locator functionality. +
+Return to the gfsh session and enter the following command:
+_start locator --name=locatorB --enable-cluster-configuration=false --locators=127.0.0.1[10334],127.0.0.1[10335] --port=10335 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7576_
+
+The resulting output should look like the following:
+Locator in /home/gemfire/locatorB on 192.168.75.9[10335] as locatorB is currently online.
+Process ID: 72956
+Uptime: 4 seconds
+GemFire Version: 8.1.0
+Java Version: 1.7.0_71
+Log File: /home/gemfire/locatorB/locatorB.log
+JVM Arguments: -Dgemfire.locators=127.0.0.1[10334],127.0.0.1[10335] -Dgemfire.enable-cluster-configuration=false -Dgemfire.load-cluster-configuration-from-dir=false -Dgemfire.log-level=config -Xms64m -Xmx64m -Dgemfire.http-service-port=7576 -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
+Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/locator-dependencies.jar
+
+Pulse will now show two locator processes. Also in the panel across the top the Total Heap, Members and Locators counts will have increased.
+
+
 
 
 
