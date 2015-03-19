@@ -32,7 +32,7 @@ _start locator --name=locatorA --enable-cluster-configuration=false --port=10334
 The command will produce an output similar to this: +
 
 ****
-gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
+_gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
 Starting a GemFire Locator in /home/gemfire/locatorA...
 Locator in /home/gemfire/locatorA on 192.168.75.9[10334] as locatorA is currently online.
 Process ID: 67956
@@ -41,7 +41,7 @@ GemFire Version: 8.1.0
 Java Version: 1.7.0_71
 Log File: /home/gemfire/locatorA/locatorA.log
 JVM Arguments: -Dgemfire.enable-cluster-configuration=false -Dgemfire.load-cluster-configuration-from-dir=false -Dgemfire.log-level=config -Xms64m -Xmx64m -Dgemfire.http-service-port=7575 -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
-Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/locator-dependencies.jar
+Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/locator-dependencies.jar_
 
 Successfully connected to: [host=192.168.75.9, port=1099]
 ****
