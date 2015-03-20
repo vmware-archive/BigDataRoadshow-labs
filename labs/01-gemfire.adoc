@@ -70,7 +70,7 @@ This locator will join with the first giving us fail over for Locator functional
 Return to the gfsh session and enter the following command: +
 [source,bash]
 ----
-_start locator --name=locatorB --enable-cluster-configuration=false --locators=127.0.0.1[10334],127.0.0.1[10335] --port=10335 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7576_ +
+start locator --name=locatorB --enable-cluster-configuration=false --locators=127.0.0.1[10334],127.0.0.1[10335] --port=10335 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7576
 ----
 The resulting output should look like the following: +
 [source]
