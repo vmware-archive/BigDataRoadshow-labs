@@ -54,7 +54,7 @@ Congratulations, you now have the beginning of a Gemfire cluster.
 == Log Into Pulse
 GemFire Pulse is a Web Application that provides a graphical dashboard for monitoring vital, real-time health and performance of GemFire clusters, members, and regions. +
 With the first locator started, Pulse is now available. +
-To start up Pulse, open a browser and enter this URL in the address bar: +
+To use Pulse, open a browser and enter this URL in the address bar: +
 http://localhost:7575/pulse/Login.html +
 
 Log In with the following credentials: +
