@@ -156,7 +156,11 @@ image::/01-gemfire/images/pulse-full-cluster-view.png
 == Adding Regions
 The region is the core building block of the Pivotal GemFire distributed system. All cached data is organized into data regions and you do all of your data puts, gets, and querying activities against them. +
 Regions behave like HashMaps in that key/value pairs are put into them. +
-
+There are two Region types: +
+1. Replicated - when a client sends data to a server and puts a key/value into this type of Region, that key/value is copied to all servers that have that region. +
+2. Partitioned - when a client sends data to a server and puts a key/value into this type of Region, a hashing policy is performed on the key and using this one server is selected to hold that key/value. In most cases redundant copies are made. +
+Regions are usually created using XML that is passed into the server on the start server command. +
+This is an example: +
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
@@ -171,6 +175,7 @@ Regions behave like HashMaps in that key/value pairs are put into them. +
   </region>
 </cache>
 ----
+In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. +
 
 
 
