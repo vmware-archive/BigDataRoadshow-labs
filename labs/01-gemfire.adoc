@@ -62,6 +62,7 @@ username: *admin* +
 password: *admin* +
 Once logged in click on green server box Icon in the Cluster View to see the Gemfire processes running on the server. +
 For the lab all processes will be on this machine. +
+
 image::01-gemfire/images/pulse-cluster-view.png[]
 
 
@@ -151,7 +152,8 @@ serverA  | 192.168.75.9(serverA:88547)<v2>:24402
 serverC  | 192.168.75.9(serverC:90642)<v4>:39304
 locatorA | 192.168.75.9(locatorA:72292:locator)<v0>:58229
 ----
-image::/01-gemfire/images/pulse-full-cluster-view.png
+
+image::/01-gemfire/images/pulse-full-cluster-view.png[]
 
 == Adding Regions
 The region is the core building block of the Pivotal GemFire distributed system. All cached data is organized into data regions and you do all of your data puts, gets, and querying activities against them. +
@@ -195,9 +197,12 @@ serverD | Region "/product" created on "serverD"
 ----
 In the top banner of Pulse the Regions count will also show 1. +
 By clicking the Data tab in Pulse the viewer will show one large region. +
-image::01-gemfire/images/pulse-data-first-region.png
+
+image::01-gemfire/images/pulse-data-first-region.png[]
+
 By click on this grey box, Pulse will show how the data is distributed across the servers. +
-image::01-gemfire/images/pulse-data-first-region-members.png
+
+image::01-gemfire/images/pulse-data-first-region-members.png[]
 
 Create another replicated Region:
 [source,bash]
@@ -279,7 +284,8 @@ ABC
 
 ----
 Another option to query data is to click the Data Browser table in Pulse. There is a query editor where OQL can be entered. The results are displayed below. +
-image::/01-gemfire/images/pulse-data-first-region-members.png
+
+image::01-gemfire/images/pulse-data-first-region-members.png[]
 
 Since OQL queries objects that can contain methods, some interesting possibilities are available. Take a moment to review this section of the userguide: +
 http://gemfire.docs.pivotal.io/latest/userguide/index.html#getting_started/querying_quick_reference.html
@@ -300,7 +306,9 @@ select count(*) from /transaction
 The result should be 1000. +
 By clicking the Data tab in Pulse it can be seen that the transaction region is now the largest. +
 Click on this region will show how the records are distributed. +
-image::/01-gemfire/images/transaction-region-distribution.png
+
+image::01-gemfire/images/transaction-region-distribution.png[]
+
 Leave this view open for the next step.
 
 == Removing a Member
@@ -376,11 +384,17 @@ Gemfire server processes can host a tomcat server that allows them to receive RE
 To input some data using this approach, first browse to a web based UI called Swagger that Gemfire includes: +
 http://127.0.0.1:7577/gemfire-api/docs/index.html
 Now click on the region link and then the Post button. Fill out the Parameters as in the form. +
-image::/01-gemfire/images/gemfire-rest-api.png
+
+image::01-gemfire/images/gemfire-rest-api.png[]
+
 Click the Try It Out button. The response code will be displayed below. +
-image::/01-gemfire/images/gemfire-rest-api.png
+
+image::01-gemfire/images/gemfire-rest-api.png[]
+
 Now when the same query is ran in the data browser in Pulse a new type shows up. Within this type is the data. +
-image::/01-gemfire/images/gemfire-pdx.png
+
+image::01-gemfire/images/gemfire-pdx.png[]
+
 GemFire's Portable Data eXchange (PDX) is a cross-language data format that can reduce the cost of distributing and serializing your objects. PDX stores data in named fields that you can access individually, to avoid the cost of deserializing the entire data object. PDX also allows you to mix versions of objects where you have added or removed fields. +
 
 **This concludes the Lab. Thank you for your attention**
