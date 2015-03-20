@@ -234,9 +234,9 @@ Explore the new regions in Pulse.
 == Adding Data Using gfsh
 Gemfire is a Key/Value store. Both the keys and the values can be objects or JSON. +
 For objects there is support for: +
-- Java
-- C#
-- C++
+- Java +
+- C# +
+- C++ +
 Gemfire can store complex object graphs and even has a query language to transverse such structures. +
 To keep things simple this lab will use Strings for Keys and Values. +
 Also, in most cases, data is inserted into the cluster from a client application (using one of the previously mentioned lanugages). +
