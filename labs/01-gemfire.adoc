@@ -225,7 +225,7 @@ PARTITION_REDUNDANT_HEAP_LRU
 PARTITION_PROXY                           
 PARTITION_PROXY_REDUNDANT
 ----
-Gemfire has a lot of configuration options to cover a wide range of use cases. More than be covered during this lab. +
+Gemfire has a lot of configuration options to cover a wide range of use cases (more than be covered during this lab). +
 For further reading refer to the Partitioned Regions chapter of the user guide: +
 http://gemfire.docs.pivotal.io/latest/userguide/index.html#developing/partitioned_regions/chapter_overview.html
 
