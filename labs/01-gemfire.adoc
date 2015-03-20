@@ -197,7 +197,7 @@ In the top banner of Pulse the Regions count will also show 1. +
 By clicking the Data tab in Pulse the viewer will show one large region. +
 image::/01-gemfire/images/pulse-data-first-region.png
 By click on this grey box, Pulse will show how the data is distributed across the servers. +
-image::/01-gemfire/images/pulse-data-first-region-members.png
+image::01-gemfire/images/pulse-data-first-region-members.png
 
 Create another replicated Region:
 [source,bash]
@@ -256,6 +256,30 @@ Key         : 123
 Value Class : java.lang.String
 Old Value   : <NULL>
 ----
+== Quering Data
+Gemfire uses a Object Query Language called OQL to access data. Functions can also be ran that return results.
+Run this command in gfsh to select the record inserted in the previous step:
+[source,bash]
+----
+query --query="select * from /product"
+----
+The results will look like this:
+[source,bash]
+----
+gfsh>query --query="select * from /product"
+
+Result     : true
+startCount : 0
+endCount   : 20
+Rows       : 1
+
+Result
+---
+ABC
+
+----
+Another option to query data is to click the Data Browser table in Pulse. There is a query editor where OQL can be entered. The results are displayed below. +
+image::/01-gemfire/images/pulse-data-first-region-members.png
 
 
 
