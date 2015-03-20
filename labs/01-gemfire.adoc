@@ -113,7 +113,7 @@ Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/
 
 Pulse will now also show the new member as well as the increase in memory capacity the addition of this process provided. +
 
-The members can also be view in gfsh by typing this command (remember by pressing tab as you type, autocomplete will help):
+The members can also be viewed in gfsh by typing this command (remember by pressing tab as you type, autocomplete will help):
 [source,bash]
 ----
 list members
