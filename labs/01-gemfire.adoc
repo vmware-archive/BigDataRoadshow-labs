@@ -310,7 +310,7 @@ With the data view of Pulse still open bring up the gfsh and enter the following
 stop server --name=serverB
 ----
 In a short time the view in pulse will now show the records distributed across three members rather than 4. +
-However, when an OQL query is executed to get the count, we are still at 1000 records even after losing a full members. +
+However, when an OQL query is executed to get the count, we are still at 1000 records even after losing a full member. +
 [source]
 ----
 gfsh>query --query="select count(*) from /transaction"
