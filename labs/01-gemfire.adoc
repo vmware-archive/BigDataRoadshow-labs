@@ -199,5 +199,34 @@ image::/01-gemfire/images/pulse-data-first-region.png
 By click on this grey box, Pulse will show how the data is distributed across the servers. This is a Replicated region, so it will be in all of them. +
 image::/01-gemfire/images/pulse-data-first-region-members.png
 
+Create another replicated Region:
+[source,bash]
+----
+create region --name=customer --type=REPLICATE
+----
+Now create a Partitioned Region.
+[source,bash]
+----
+create region --name=transaction --type=PARTITION --redundant-copies=1
+----
+When using the tab key, the options for Partitioned regions may have come up.
+[source]
+----
+PARTITION                                 
+PARTITION_REDUNDANT                       
+PARTITION_PERSISTENT                      
+PARTITION_REDUNDANT_PERSISTENT            
+PARTITION_OVERFLOW                        
+PARTITION_REDUNDANT_OVERFLOW              
+PARTITION_PERSISTENT_OVERFLOW             
+PARTITION_REDUNDANT_PERSISTENT_OVERFLOW   
+PARTITION_HEAP_LRU                        
+PARTITION_REDUNDANT_HEAP_LRU              
+PARTITION_PROXY                           
+PARTITION_PROXY_REDUNDANT
+---
+Gemfire has a lot of configuration options to cover a wide range of use cases. More than be covered during this lab. +
+http://gemfire.docs.pivotal.io/latest/userguide/index.html#developing/partitioned_regions/chapter_overview.html
+
 
 
