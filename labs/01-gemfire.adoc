@@ -291,7 +291,7 @@ To do this a gfsh script will be used. +
 ----
 run --file=01-gemfire/transactions.gfsh
 ----
-Message will scroll past in gfsh showing all the puts occuring. +
+Messages will scroll past in gfsh showing all the puts occuring. +
 To get the number of records in the region, run this OQL query in gfsh or the data browser:
 [source,sql]
 ----
