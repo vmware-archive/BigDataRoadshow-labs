@@ -140,7 +140,7 @@ start server --name=serverD --use-cluster-configuration=false --server-port=0 --
 ----
 At the end of this process a cluster with six members should be visible in gfsh and pulse.
 [source,bash]
-....
+----
 gfsh>list members
   Name   | Id
 -------- | ----------------------------------------------
@@ -150,11 +150,54 @@ locatorB | 192.168.75.9(locatorB:72956:locator)<v1>:20048
 serverA  | 192.168.75.9(serverA:88547)<v2>:24402
 serverC  | 192.168.75.9(serverC:90642)<v4>:39304
 locatorA | 192.168.75.9(locatorA:72292:locator)<v0>:58229
-....
+----
 image::/01-gemfire/images/pulse-full-cluster-view.png
 
+== Adding Regions
+The region is the core building block of the Pivotal GemFire distributed system. All cached data is organized into data regions and you do all of your data puts, gets, and querying activities against them. +
+Regions behave like HashMaps in that key/value pairs are put into them. +
+There are two Region types: +
+1. Replicated - when a client sends data to a server and puts a key/value into this type of Region, that key/value is copied to all servers that have that region. +
+2. Partitioned - when a client sends data into this type of Region, a hashing policy is performed on the key and using this one server is selected to hold that key/value. In most cases redundant copies are made. +
+Regions are usually created using XML that is passed into the server on the start server command. +
+This is an example: +
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<cache
+    xmlns="http://schema.pivotal.io/gemfire/cache"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://schema.pivotal.io/gemfire/cache http://schema.pivotal.io/gemfire/cache/cache-8.1.xsd"
+    version="8.1">
+  <cache-server port="${PORT}" max-connections="${MAXCNXS}"/>
+  <region name="root">
+    <region-attributes refid="REPLICATE"/>
+  </region>
+</cache>
+----
+In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. +
 
-
+Add the following command in gfsh:
+[source]
+----
+create region --name=product --type=REPLICATE
+----
+It will procude an output like this following:
+[source]
+----
+gfsh>create region --name=product --type=REPLICATE
+Member  | Status
+------- | --------------------------------------
+serverC | Region "/product" created on "serverC"
+serverB | Region "/product" created on "serverB"
+serverA | Region "/product" created on "serverA"
+serverD | Region "/product" created on "serverD"
+----
+In the top banner of Pulse the Regions count will also show 1. +
+By clicking the Data tab in Pulse the viewer will show one large region. +
+image::/01-gemfire/images/pulse-data-first-region.png
+By click on this grey box, Pulse will show how the data is distributed across the servers. This is a Replicated region, so it will be in all of them. +
+image::/01-gemfire/images/pulse-data-first-region-members.png
 
 
 
