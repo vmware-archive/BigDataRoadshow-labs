@@ -152,8 +152,7 @@ serverA  | 192.168.75.9(serverA:88547)<v2>:24402
 serverC  | 192.168.75.9(serverC:90642)<v4>:39304
 locatorA | 192.168.75.9(locatorA:72292:locator)<v0>:58229
 ----
-
-image::/01-gemfire/images/pulse-full-cluster-view.png[]
+image::/labs/01-gemfire/images/pulse-full-cluster-view.png[]
 
 == Adding Regions
 The region is the core building block of the Pivotal GemFire distributed system. All cached data is organized into data regions and you do all of your data puts, gets, and querying activities against them. +
