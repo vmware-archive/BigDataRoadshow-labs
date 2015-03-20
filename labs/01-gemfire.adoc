@@ -231,6 +231,34 @@ http://gemfire.docs.pivotal.io/latest/userguide/index.html#developing/partitione
 
 Explore the new regions in Pulse.
 
+== Adding Data Using gfsh
+Gemfire is a Key/Value store. Both the keys and the values can be objects or JSON. +
+For objects there is support for: +
+- Java
+- C#
+- C++
+Gemfire can store complex object graphs and even has a query language to transverse such structures. +
+To keep things simple this lab will use Strings for Keys and Values. +
+Also, in most cases, data is inserted into the cluster from a client application (using one of the previously mentioned lanugages). +
+For this lab gfsh and the developer REST api will be used.
+Run this command in gfsh to do a simple put:
+[source,bash]
+----
+put --region=/product --key="123" --value="ABC"
+----
+The response will look like this:
+[source,bash]
+----
+gfsh>put --region=/product --key="123" --value="ABC"
+Result      : true
+Key Class   : java.lang.String
+Key         : 123
+Value Class : java.lang.String
+Old Value   : <NULL>
+----
+
+
+
 
 
 
