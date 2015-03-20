@@ -62,7 +62,7 @@ username: *admin* +
 password: *admin* +
 Once logged in click on green server box Icon in the Cluster View to see the Gemfire processes running on the server. +
 For the lab all processes will be on this machine. +
-image::https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/blob/master/labs/01-gemfire/images/pulse-cluster-view.png[]
+image::01-gemfire/images/pulse-cluster-view.png[]
 
 
 == Start another Locator
