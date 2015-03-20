@@ -196,7 +196,7 @@ serverD | Region "/product" created on "serverD"
 In the top banner of Pulse the Regions count will also show 1. +
 By clicking the Data tab in Pulse the viewer will show one large region. +
 image::/01-gemfire/images/pulse-data-first-region.png
-By click on this grey box, Pulse will show how the data is distributed across the servers. This is a Replicated region, so it will be in all of them. +
+By click on this grey box, Pulse will show how the data is distributed across the servers. +
 image::/01-gemfire/images/pulse-data-first-region-members.png
 
 Create another replicated Region:
@@ -228,6 +228,10 @@ PARTITION_PROXY_REDUNDANT
 Gemfire has a lot of configuration options to cover a wide range of use cases. More than be covered during this lab. +
 For further reading refer to the Partitioned Regions chapter of the user guide: +
 http://gemfire.docs.pivotal.io/latest/userguide/index.html#developing/partitioned_regions/chapter_overview.html
+
+Explore the new regions in Pulse.
+
+
 
 
 
