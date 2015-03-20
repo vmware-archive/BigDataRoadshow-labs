@@ -175,7 +175,7 @@ This is an example: +
   </region>
 </cache>
 ----
-In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. +
+In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. The downside of this approach is the Regions are not persistant should a member need to be restarted. The xml configuration options is best for this. +
 
 Add the following command in gfsh:
 [source]
@@ -304,9 +304,72 @@ image::/01-gemfire/images/transaction-region-distribution.png
 Leave this view open for the next step.
 
 == Removing a Member
-With the data view of Pulse still open bring up the gfsh command 
+With the data view of Pulse still open bring up the gfsh and enter the following command. Watch the data view in Pulse as this runs. +
+[source]
+----
+stop server --name=serverB
+----
+In a short time the view in pulse will now show the records distributed across three members rather than 4. +
+However, when an OQL query is executed to get the count, we are still at 1000 records even after losing a full members. +
+[source]
+----
+gfsh>query --query="select count(*) from /transaction"
+
+Result     : true
+startCount : 0
+endCount   : 20
+Rows       : 1
+
+Result
+--
+1000
+
+NEXT_STEP_NAME : END
+----
+This is thanks to our redundant copy. +
+To ensure the data is evenly distributed we can run a rebalance command in gfsh:
+[source,bash]
+----
+gfsh>rebalance
+
+Rebalanced partition regions  /transaction
+
+                                       Rebalanced Stats                                         | Value
+----------------------------------------------------------------------------------------------- | -----
+Total bytes in all redundant bucket copies created during this rebalance                        | 18791
+Total time (in milliseconds) spent creating redundant bucket copies during this rebalance       | 365
+Total number of redundant copies created during this rebalance                                  | 57
+Total bytes in buckets moved during this rebalance                                              | 0
+Total time (in milliseconds) spent moving buckets during this rebalance                         | 0
+Total number of buckets moved during this rebalance                                             | 0
+Total time (in milliseconds) spent switching the primary state of buckets during this rebalance | 141
+Total primaries transferred during this rebalance                                               | 5
+Total time (in milliseconds) for this rebalance                                                 | 544
+
+----
+This command also prepares the cluster to take more data into the Region after its lost the resources of serverB.
 
 == Adding a Member and Rebalancing
+To start the member back up, run this command. Notice the extra flag placed at the end. +
+As before, watch the Pulse Data view while this command runs. +
+[source,bash]
+----
+start server --name=serverB --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7577 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m --rebalance
+----
+The Region was created, but nothing was rebalanced. Why? +
+List the Regions in gfsh for a clue. +
+To fix this run the following command in gfsh:
+[source,bash]
+----
+gfsh>create region --name=transaction --type=PARTITION --redundant-copies=1
+Member  | Status
+------- | --------------------------------------------------------
+serverC | Skipping "serverC". Region "transaction" already exists.
+serverD | Skipping "serverD". Region "transaction" already exists.
+serverA | Skipping "serverA". Region "transaction" already exists.
+serverB | Region "/transaction" created on "serverB"
+----
+Now run the rebalance command. +
 
 == BONUS Inputing Data with the Developer REST API
 Gemfire server processes can host a tomcat server that allows them to receive REST calls to perform operations on the grid. +
@@ -319,6 +382,8 @@ image::/01-gemfire/images/gemfire-rest-api.png
 Now when the same query is ran in the data browser in Pulse a new type shows up. Within this type is the data.
 image::/01-gemfire/images/gemfire-pdx.png
 GemFire's Portable Data eXchange (PDX) is a cross-language data format that can reduce the cost of distributing and serializing your objects. PDX stores data in named fields that you can access individually, to avoid the cost of deserializing the entire data object. PDX also allows you to mix versions of objects where you have added or removed fields. +
+
+**This concludes the Lab. Thank you for your attention**
 
 
 
