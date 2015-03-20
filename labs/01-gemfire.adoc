@@ -177,7 +177,27 @@ This is an example: +
 ----
 In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. +
 
-
+Add the following command in gfsh:
+[source]
+----
+create region --name=product --type=REPLICATE
+----
+It will procude an output like this following:
+[source]
+----
+gfsh>create region --name=product --type=REPLICATE
+Member  | Status
+------- | --------------------------------------
+serverC | Region "/product" created on "serverC"
+serverB | Region "/product" created on "serverB"
+serverA | Region "/product" created on "serverA"
+serverD | Region "/product" created on "serverD"
+----
+In the top banner of Pulse the Regions count will also show 1. +
+By clicking the Data tab in Pulse the viewer will show one large region. +
+image::/01-gemfire/images/pulse-data-first-region.png
+By click on this grey box, Pulse will show how the data is distributed across the servers. This is a Replicated region, so it will be in all of them. +
+image::/01-gemfire/images/pulse-data-first-region-members.png
 
 
 
