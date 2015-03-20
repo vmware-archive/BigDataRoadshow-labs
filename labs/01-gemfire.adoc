@@ -175,7 +175,7 @@ This is an example: +
   </region>
 </cache>
 ----
-In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. The downside of this approach is the Regions are not persistant should a member need to be restarted. The xml configuration options is best for this. +
+In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. The downside of this approach is the Regions are not persistent should a member need to be restarted. The xml configuration options is best for this. +
 
 Add the following command in gfsh:
 [source]
