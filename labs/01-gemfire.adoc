@@ -36,7 +36,7 @@ start locator --name=locatorA --enable-cluster-configuration=false --port=10334 
 The command will produce an output similar to this: +
 [source,bash]
 ----
-_gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
+gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
 Starting a GemFire Locator in /home/gemfire/locatorA...
 Locator in /home/gemfire/locatorA on 192.168.75.9[10334] as locatorA is currently online.
 Process ID: 67956
@@ -54,19 +54,19 @@ Congratulations, you now have the beginning of a Gemfire cluster.
 == Log Into Pulse
 GemFire Pulse is a Web Application that provides a graphical dashboard for monitoring vital, real-time health and performance of GemFire clusters, members, and regions. +
 With the first locator started, Pulse is now available. +
-To start up Pulse, open a browser and enter this URL in the address bar: +
+To use Pulse, open a browser and enter this URL in the address bar: +
 http://localhost:7575/pulse/Login.html +
 
 Log In with the following credentials: +
 username: *admin* +
 password: *admin* +
 Once logged in click on green server box Icon in the Cluster View to see the Gemfire processes running on the server. +
-For the lab all processes will be on this machine.
-image::/01-gemfire/images/pulse-cluster-view.png
+For the lab all processes will be on this machine. +
+image::01-gemfire/images/pulse-cluster-view.png[]
 
 
 == Start another Locator
-This locator will join with the first giving us fail over for Locator functionality. +
+This locator will join with the first giving the cluster fail over for Locator functionality. +
 Return to the gfsh session and enter the following command: +
 [source,bash]
 ----
@@ -101,19 +101,19 @@ The output will look similar to this: +
 
 [source]
 ----
-_Server in /home/gemfire/serverA on 192.168.75.9[33971] as serverA is currently online.
+Server in /home/gemfire/serverA on 192.168.75.9[33971] as serverA is currently online.
 Process ID: 88547
 Uptime: 9 seconds
 GemFire Version: 8.1.0
 Java Version: 1.7.0_71
 Log File: /home/gemfire/serverA/serverA.log
 JVM Arguments: -Dgemfire.locators=127.0.0.1[10334],127.0.0.1[10335] -Dgemfire.use-cluster-configuration=false -Dgemfire.http-service-port=7577 -Dgemfire.start-dev-rest-api=true -Xms128m -Xmx128m -XX:OnOutOfMemoryError=kill -KILL %p -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
-Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/server-dependencies.jar_
+Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/server-dependencies.jar
 ----
 
 Pulse will now also show the new member as well as the increase in memory capacity the addition of this process provided. +
 
-The members can also be view in gfsh by typing this command (remember by pressing tab as you type, autocomplete will help):
+The members can also be viewed in gfsh by typing this command (remember by pressing tab as you type, autocomplete will help):
 [source,bash]
 ----
 list members
@@ -122,8 +122,8 @@ list members
 The output will look something like this:
 [source]
 ----
-gfsh>list members +
-  Name   | Id +
+gfsh>list members 
+  Name   | Id 
 -------- | ----------------------------------------------
 locatorB | 192.168.75.9(locatorB:72956:locator)<v1>:20048
 serverA  | 192.168.75.9(serverA:88547)<v2>:24402
@@ -158,7 +158,7 @@ The region is the core building block of the Pivotal GemFire distributed system.
 Regions behave like HashMaps in that key/value pairs are put into them. +
 There are two Region types: +
 1. Replicated - when a client sends data to a server and puts a key/value into this type of Region, that key/value is copied to all servers that have that region. +
-2. Partitioned - when a client sends data into this type of Region, a hashing policy is performed on the key and using this one server is selected to hold that key/value. In most cases redundant copies are made. +
+2. Partitioned - when a client sends data into this type of Region, a hashing policy is performed on the key and using the result, one of the servers is selected to hold that key/value. In most cases redundant copies are made. +
 Regions are usually created using XML that is passed into the server on the start server command. +
 This is an example: +
 [source,xml]
@@ -175,7 +175,7 @@ This is an example: +
   </region>
 </cache>
 ----
-In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. +
+In this lab, to get a better feel for the process, Regions will be created on the fly using gfsh. The downside of this approach is the Regions are not persistent should a member need to be restarted. The xml configuration options is best for this. +
 
 Add the following command in gfsh:
 [source]
@@ -195,7 +195,7 @@ serverD | Region "/product" created on "serverD"
 ----
 In the top banner of Pulse the Regions count will also show 1. +
 By clicking the Data tab in Pulse the viewer will show one large region. +
-image::/01-gemfire/images/pulse-data-first-region.png
+image::01-gemfire/images/pulse-data-first-region.png
 By click on this grey box, Pulse will show how the data is distributed across the servers. +
 image::01-gemfire/images/pulse-data-first-region-members.png
 
@@ -225,7 +225,7 @@ PARTITION_REDUNDANT_HEAP_LRU
 PARTITION_PROXY                           
 PARTITION_PROXY_REDUNDANT
 ----
-Gemfire has a lot of configuration options to cover a wide range of use cases. More than be covered during this lab. +
+Gemfire has a lot of configuration options to cover a wide range of use cases (more than be covered during this lab). +
 For further reading refer to the Partitioned Regions chapter of the user guide: +
 http://gemfire.docs.pivotal.io/latest/userguide/index.html#developing/partitioned_regions/chapter_overview.html
 
@@ -234,9 +234,9 @@ Explore the new regions in Pulse.
 == Adding Data Using gfsh
 Gemfire is a Key/Value store. Both the keys and the values can be objects or JSON. +
 For objects there is support for: +
-- Java
-- C#
-- C++
+- Java +
+- C# +
+- C++ +
 Gemfire can store complex object graphs and even has a query language to transverse such structures. +
 To keep things simple this lab will use Strings for Keys and Values. +
 Also, in most cases, data is inserted into the cluster from a client application (using one of the previously mentioned lanugages). +
@@ -280,6 +280,111 @@ ABC
 ----
 Another option to query data is to click the Data Browser table in Pulse. There is a query editor where OQL can be entered. The results are displayed below. +
 image::/01-gemfire/images/pulse-data-first-region-members.png
+
+Since OQL queries objects that can contain methods, some interesting possibilities are available. Take a moment to review this section of the userguide: +
+http://gemfire.docs.pivotal.io/latest/userguide/index.html#getting_started/querying_quick_reference.html
+
+== Adding More Data
+In this step data will be added to the Partitioned Region. +
+To do this a gfsh script will be used. +
+[source,bash]
+----
+run --file=01-gemfire/transactions.gfsh
+----
+Messages will scroll past in gfsh showing all the puts occuring. +
+To get the number of records in the region, run this OQL query in gfsh or the data browser:
+[source,sql]
+----
+select count(*) from /transaction
+----
+The result should be 1000. +
+By clicking the Data tab in Pulse it can be seen that the transaction region is now the largest. +
+Click on this region will show how the records are distributed. +
+image::/01-gemfire/images/transaction-region-distribution.png
+Leave this view open for the next step.
+
+== Removing a Member
+With the data view of Pulse still open bring up the gfsh and enter the following command. Watch the data view in Pulse as this runs. +
+[source]
+----
+stop server --name=serverB
+----
+In a short time the view in pulse will now show the records distributed across three members rather than 4. +
+However, when an OQL query is executed to get the count, we are still at 1000 records even after losing a full member. +
+[source]
+----
+gfsh>query --query="select count(*) from /transaction"
+
+Result     : true
+startCount : 0
+endCount   : 20
+Rows       : 1
+
+Result
+--
+1000
+
+NEXT_STEP_NAME : END
+----
+This is thanks to our redundant copy. +
+To ensure the data is evenly distributed we can run a rebalance command in gfsh:
+[source,bash]
+----
+gfsh>rebalance
+
+Rebalanced partition regions  /transaction
+
+                                       Rebalanced Stats                                         | Value
+----------------------------------------------------------------------------------------------- | -----
+Total bytes in all redundant bucket copies created during this rebalance                        | 18791
+Total time (in milliseconds) spent creating redundant bucket copies during this rebalance       | 365
+Total number of redundant copies created during this rebalance                                  | 57
+Total bytes in buckets moved during this rebalance                                              | 0
+Total time (in milliseconds) spent moving buckets during this rebalance                         | 0
+Total number of buckets moved during this rebalance                                             | 0
+Total time (in milliseconds) spent switching the primary state of buckets during this rebalance | 141
+Total primaries transferred during this rebalance                                               | 5
+Total time (in milliseconds) for this rebalance                                                 | 544
+
+----
+This command also prepares the cluster to take more data into the Region after its lost the resources of serverB.
+
+== Adding a Member and Rebalancing
+To start the member back up, run this command. Notice the extra flag placed at the end. +
+As before, watch the Pulse Data view while this command runs. +
+[source,bash]
+----
+start server --name=serverB --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7577 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m --rebalance
+----
+The Region was created, but nothing was rebalanced. Why? +
+List the Regions in gfsh for a clue. +
+To fix this run the following command in gfsh:
+[source,bash]
+----
+gfsh>create region --name=transaction --type=PARTITION --redundant-copies=1
+Member  | Status
+------- | --------------------------------------------------------
+serverC | Skipping "serverC". Region "transaction" already exists.
+serverD | Skipping "serverD". Region "transaction" already exists.
+serverA | Skipping "serverA". Region "transaction" already exists.
+serverB | Region "/transaction" created on "serverB"
+----
+Now run the rebalance command. +
+
+== BONUS Inputing Data with the Developer REST API
+Gemfire server processes can host a tomcat server that allows them to receive REST calls to perform operations on the grid. +
+To input some data using this approach, first browse to a web based UI called Swagger that Gemfire includes: +
+http://127.0.0.1:7577/gemfire-api/docs/index.html
+Now click on the region link and then the Post button. Fill out the Parameters as in the form. +
+image::/01-gemfire/images/gemfire-rest-api.png
+Click the Try It Out button. The response code will be displayed below. +
+image::/01-gemfire/images/gemfire-rest-api.png
+Now when the same query is ran in the data browser in Pulse a new type shows up. Within this type is the data. +
+image::/01-gemfire/images/gemfire-pdx.png
+GemFire's Portable Data eXchange (PDX) is a cross-language data format that can reduce the cost of distributing and serializing your objects. PDX stores data in named fields that you can access individually, to avoid the cost of deserializing the entire data object. PDX also allows you to mix versions of objects where you have added or removed fields. +
+
+**This concludes the Lab. Thank you for your attention**
+
 
 
 
