@@ -104,14 +104,14 @@ The members can also be view in gfsh by typing this command (remember by pressin
 _list members_ +
 
 The output will look something like this: +
-****
+[source]
 gfsh>list members +
-  Name   | Id
+  Name   | Id +
 -------- | ----------------------------------------------
 locatorB | 192.168.75.9(locatorB:72956:locator)<v1>:20048
 serverA  | 192.168.75.9(serverA:88547)<v2>:24402
 locatorA | 192.168.75.9(locatorA:72292:locator)<v0>:58229
-****
+[source]
 
 
 
