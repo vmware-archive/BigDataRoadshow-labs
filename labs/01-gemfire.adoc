@@ -195,7 +195,7 @@ serverD | Region "/product" created on "serverD"
 ----
 In the top banner of Pulse the Regions count will also show 1. +
 By clicking the Data tab in Pulse the viewer will show one large region. +
-image::/01-gemfire/images/pulse-data-first-region.png
+image::01-gemfire/images/pulse-data-first-region.png
 By click on this grey box, Pulse will show how the data is distributed across the servers. +
 image::01-gemfire/images/pulse-data-first-region-members.png
 
