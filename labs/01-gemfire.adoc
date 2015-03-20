@@ -27,8 +27,8 @@ gfsh is interactive and contains auto completes to assist users. This functional
 The locator is a Pivotal GemFire process that tells new, connecting members/clients where running members are located and provides load balancing for server use. +
 This locator will be the first member in the cluster and will act as the membership coordinator as well as the management node. +
 Copy and paste the following command into gfsh: +
-[source, bash]
-start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575_
+[source,bash]
+start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
 [source]
 
 The command will produce an output similar to this: +
