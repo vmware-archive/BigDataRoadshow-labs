@@ -281,7 +281,7 @@ ABC
 Another option to query data is to click the Data Browser table in Pulse. There is a query editor where OQL can be entered. The results are displayed below. +
 image::/01-gemfire/images/pulse-data-first-region-members.png
 
-Since OQL queries objects that can contain methods, some interesting possibilities are available. Take a moments to review this sections of the userguide: +
+Since OQL queries objects that can contain methods, some interesting possibilities are available. Take a moment to review this sections of the userguide: +
 http://gemfire.docs.pivotal.io/latest/userguide/index.html#getting_started/querying_quick_reference.html
 
 == Adding More Data
