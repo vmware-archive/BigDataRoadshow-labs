@@ -130,6 +130,28 @@ serverA  | 192.168.75.9(serverA:88547)<v2>:24402
 locatorA | 192.168.75.9(locatorA:72292:locator)<v0>:58229
 ----
 
+== Add the Rest of the Members
+To add the rest of the members in the grid, enter each line into gfsh. Wait for the command to complete and the process to start before entering the next command.
+[source,bash]
+----
+start server --name=serverB --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7578 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m
+start server --name=serverC --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7579 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m
+start server --name=serverD --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7580 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m
+----
+At the end of this process a cluster with six members should be visible in gfsh and pulse.
+[source,bash]
+....
+gfsh>list members
+  Name   | Id
+-------- | ----------------------------------------------
+serverB  | 192.168.75.9(serverB:90339)<v3>:5220
+serverD  | 192.168.75.9(serverD:90869)<v5>:14761
+locatorB | 192.168.75.9(locatorB:72956:locator)<v1>:20048
+serverA  | 192.168.75.9(serverA:88547)<v2>:24402
+serverC  | 192.168.75.9(serverC:90642)<v4>:39304
+locatorA | 192.168.75.9(locatorA:72292:locator)<v0>:58229
+....
+image::/01-gemfire/images/pulse-full-cluster-view.png
 
 
 
