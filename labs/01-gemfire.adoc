@@ -36,7 +36,7 @@ start locator --name=locatorA --enable-cluster-configuration=false --port=10334 
 The command will produce an output similar to this: +
 [source,bash]
 ----
-_gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
+gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
 Starting a GemFire Locator in /home/gemfire/locatorA...
 Locator in /home/gemfire/locatorA on 192.168.75.9[10334] as locatorA is currently online.
 Process ID: 67956
