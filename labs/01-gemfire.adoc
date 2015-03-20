@@ -373,13 +373,13 @@ Now run the rebalance command. +
 
 == BONUS Inputing Data with the Developer REST API
 Gemfire server processes can host a tomcat server that allows them to receive REST calls to perform operations on the grid. +
-To input some data using this approach, first browse to a web based UI called Swagger that Gemfire includes:
+To input some data using this approach, first browse to a web based UI called Swagger that Gemfire includes: +
 http://127.0.0.1:7577/gemfire-api/docs/index.html
 Now click on the region link and then the Post button. Fill out the Parameters as in the form. +
 image::/01-gemfire/images/gemfire-rest-api.png
 Click the Try It Out button. The response code will be displayed below. +
 image::/01-gemfire/images/gemfire-rest-api.png
-Now when the same query is ran in the data browser in Pulse a new type shows up. Within this type is the data.
+Now when the same query is ran in the data browser in Pulse a new type shows up. Within this type is the data. +
 image::/01-gemfire/images/gemfire-pdx.png
 GemFire's Portable Data eXchange (PDX) is a cross-language data format that can reduce the cost of distributing and serializing your objects. PDX stores data in named fields that you can access individually, to avoid the cost of deserializing the entire data object. PDX also allows you to mix versions of objects where you have added or removed fields. +
 
