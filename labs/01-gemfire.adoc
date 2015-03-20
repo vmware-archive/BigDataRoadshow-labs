@@ -83,20 +83,20 @@ Pulse will now show two locator processes. Also in the panel across the top the 
 A GemFire server is a Pivotal GemFire process that runs as a long-lived, configurable member of a distributed system. +
 The server is what contains the Regions which in turn contains the data. Servers can also bring the compute to the data, similar to stored Procedures, by deploying java logic into them. +
 
-To start a server process copy the following command into gfsh:+
+To start a server process copy the following command into gfsh: +
 _start server --name=serverA --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7577 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m_
 
 The output will look similar to this: +
 
 ****
-Server in /home/gemfire/serverA on 192.168.75.9[33971] as serverA is currently online.
+_Server in /home/gemfire/serverA on 192.168.75.9[33971] as serverA is currently online.
 Process ID: 88547
 Uptime: 9 seconds
 GemFire Version: 8.1.0
 Java Version: 1.7.0_71
 Log File: /home/gemfire/serverA/serverA.log
 JVM Arguments: -Dgemfire.locators=127.0.0.1[10334],127.0.0.1[10335] -Dgemfire.use-cluster-configuration=false -Dgemfire.http-service-port=7577 -Dgemfire.start-dev-rest-api=true -Xms128m -Xmx128m -XX:OnOutOfMemoryError=kill -KILL %p -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
-Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/server-dependencies.jar
+Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/server-dependencies.jar_
 ****
 Pulse will now also show the new member as well as the increase in memory capacity the addition of this process provided. +
 
@@ -105,7 +105,7 @@ _list members_ +
 
 The output will look something like this: +
 ****
-gfsh>list members
+gfsh>list members +
   Name   | Id
 -------- | ----------------------------------------------
 locatorB | 192.168.75.9(locatorB:72956:locator)<v1>:20048
