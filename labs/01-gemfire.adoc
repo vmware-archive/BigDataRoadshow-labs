@@ -101,14 +101,14 @@ The output will look similar to this: +
 
 [source]
 ----
-_Server in /home/gemfire/serverA on 192.168.75.9[33971] as serverA is currently online.
+Server in /home/gemfire/serverA on 192.168.75.9[33971] as serverA is currently online.
 Process ID: 88547
 Uptime: 9 seconds
 GemFire Version: 8.1.0
 Java Version: 1.7.0_71
 Log File: /home/gemfire/serverA/serverA.log
 JVM Arguments: -Dgemfire.locators=127.0.0.1[10334],127.0.0.1[10335] -Dgemfire.use-cluster-configuration=false -Dgemfire.http-service-port=7577 -Dgemfire.start-dev-rest-api=true -Xms128m -Xmx128m -XX:OnOutOfMemoryError=kill -KILL %p -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
-Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/server-dependencies.jar_
+Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/server-dependencies.jar
 ----
 
 Pulse will now also show the new member as well as the increase in memory capacity the addition of this process provided. +
