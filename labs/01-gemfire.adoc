@@ -122,8 +122,8 @@ list members
 The output will look something like this:
 [source]
 ----
-gfsh>list members +
-  Name   | Id +
+gfsh>list members 
+  Name   | Id 
 -------- | ----------------------------------------------
 locatorB | 192.168.75.9(locatorB:72956:locator)<v1>:20048
 serverA  | 192.168.75.9(serverA:88547)<v2>:24402
