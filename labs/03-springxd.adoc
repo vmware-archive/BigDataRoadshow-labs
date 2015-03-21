@@ -310,13 +310,47 @@ xd:>hadoop fs cat /xd/output-0.txt
 
 +
 +
+gfsh>start locator --name=locator1 --J=-Dgemfire.http-service-port=7575
+Starting a GemFire Locator in /home/gpadmin/BigDataRoadshow/locator1...
+................................
+Locator in /home/gpadmin/BigDataRoadshow/locator1 on ip-172-31-18-42.ec2.internal[10334] as locator1 is currently online.
+Process ID: 46044
+Uptime: 16 seconds
+GemFire Version: 8.1.0
+Java Version: 1.7.0_45
+Log File: /home/gpadmin/BigDataRoadshow/locator1/locator1.log
+JVM Arguments: -Dgemfire.enable-cluster-configuration=true -Dgemfire.load-cluster-configuration-from-dir=false -Dgemfire.http-service-port=7575 -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
+Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivotal/gemfire/Pivotal_GemFire_810/lib/locator-dependencies.jar
+
+Successfully connected to: [host=ip-172-31-18-42.ec2.internal, port=1099]
+
+Cluster configuration service is up and running.
+
+
+
 +
-start locator --name=locator1
+gfsh>start server --name=server1 --J=-Dgemfire.start-dev-rest-api=true --J=-Dgemfire.http-service-port=8080
+Starting a GemFire Server in /home/gpadmin/BigDataRoadshow/server1...
+..............
+Server in /home/gpadmin/BigDataRoadshow/server1 on ip-172-31-18-42.ec2.internal[40404] as server1 is currently online.
+Process ID: 46391
+Uptime: 7 seconds
+GemFire Version: 8.1.0
+Java Version: 1.7.0_45
+Log File: /home/gpadmin/BigDataRoadshow/server1/server1.log
+JVM Arguments: -Dgemfire.default.locators=172.31.18.42[10334] -Dgemfire.use-cluster-configuration=true -Dgemfire.start-dev-rest-api=true -Dgemfire.http-service-port=8080 -XX:OnOutOfMemoryError=kill -KILL %p -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
+Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivotal/gemfire/Pivotal_GemFire_810/lib/server-dependencies.jar
 +
-start server --name=server1 --J=-Dgemfire.start-dev-rest-api=true --J=-Dgemfire.http-service-port=8080
+
+gfsh>create region --name=ValuesFromXD --type=REPLICATE
+Member  | Status
+------- | -------------------------------------------
+server1 | Region "/ValuesFromXD" created on "server1"
 +
-create region --name=/Stocks --type=REPLICATE
-+
+
+xd:>stream create gemfireTap --definition "tap:stream:transformToHDFS.filter > gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=ValuesFromXD --keyExpression=payload.getField('key')" --deploy
+Created and deployed new stream 'gemfireTap'
+
 
 
 +
@@ -445,3 +479,6 @@ Hints:
 Good luck!! Next challenge is adding a Service Broker capable of provisioning PostgreSQL instances to the release you just created :)
 
 If you'd like to check the solution for this lab, clone this repo: https://github.com/Pivotal-Field-Engineering/postgres-bosh-release[postgres-bosh-release]
+
+
+xd:>stream create gemfireTap --definition "http --port=9020 | splitter --expression=#jsonPath(payload,'$.Values') | filter --expression=#jsonPath(payload,'$.Y').equals(0) | object-to-json | gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=ValuesFromXD --keyExpression=payload.getField('key')" --deploy
