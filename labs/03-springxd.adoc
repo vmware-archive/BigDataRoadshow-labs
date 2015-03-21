@@ -81,12 +81,27 @@ xd:> stream create stream1 --definition "time | log" --deploy
 Created and deployed new stream 'stream1'
 ----
 Check the logs on the window where you started __xd-singlenode__. It should be outputing time ticks. +
+Now the _stream list_ command should also identify the stream we created and we should be able to destroy it when desired:
+
+[source,bash]
+----
+xd:>stream list
+  Stream Name  Stream Definition  Status
+  -----------  -----------------  --------
+  stream1      time|log           deployed
+
+xd:>stream destroy stream1
+Destroyed stream 'stream1'
+
+----
+ 
+ Now let's change it a little in order to output to a file instead.
  
 * Reading the system's time and outputing to a file:
  
 [source,bash]
 ----
-xd:>stream create streamTimeFile --definition "time | file --name=/tmp/mystream" --deploy
+xd:>stream create streamTimeFile --definition "time | file --name=mystream --dir=/tmp" --deploy
 Created and deployed new stream 'streamTimeFile'
 ----
 
@@ -97,10 +112,91 @@ Check the log file on a terminal window and see the time is now being output the
 $ tail -f /tmp/mystream.out
 2015-03-13 23:38:19
 2015-03-13 23:38:20
-(...)
+
 ----
 
-* Listening HTTP port and outputing to a file
+* Listening HTTP port and outputing to a file +
+
+As the next step on this exercise, let's change the _source_ to be something more useful than "time"  
+If we specify _http_, XD will automatically start listening to HTTP connections on a port, where we can submit our data to:
+ +
+[source,bash]
+----
+xd:>stream create httptofile --definition "http --port=9020 | file --name=fromhttp --dir=/tmp" --deploy
+Created and deployed new stream 'httptofile'
+----
+
+Now we'll use XD-shell itself to send a JSON object to that HTTP listener:
+ +
+[source,bash]
+----
+xd:> http post --target 'http://localhost:9020' --data '{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}'
+
+> POST (text/plain;Charset=UTF-8) http://localhost:9020 {Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
+> 200 OK
+----
+
+As expected, that data should be now in the /tmp/fromhttp.out file, as specified:
+ +
+[source,bash]
+----
+$ cat /tmp/fromhttp.out 
+{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
+----
+ 
+* Extracting JSON data +
+ 
+As a next step, we'll see how XD can be used to easily apply built-in transformations, like extracting specific fields from JSON requests on a data stream. +
+Deploy the following stream:
+ +
+[source,bash]
+----
+xd:>stream create transform --definition "http --port=9030 | splitter --expression=#jsonPath(payload,'$.Values') | file --name=transform --dir=/tmp" --deploy
+Created and deployed new stream 'transform'
+----
+
+Let's send the exact same data to this new stream:
+ +
+[source,bash]
+----
+xd:>http post --target 'http://localhost:9030' --data '{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}'
+> POST (text/plain;Charset=UTF-8) http://localhost:9030 {Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
+> 200 OK
+----
+
+The result, as output on the file specified, is the each value extracted as expected. 
+ +
+[source,bash]
+----
+$ cat /tmp/transform.out 
+{X=0, Y=1, Z=0, key=0}
+{X=1, Y=0, Z=0, key=1}
+----
+Each value of our JSON object array was extracted as a separate line by the _splitter_ module.
+ 
+Next, we'll add an additional filter to the same definition, extracting only the lines where _Y_ has the value _0_
+ +
+[source,bash]
+----
+xd:>stream create transform2 --definition "http --port=9040 | splitter --expression=#jsonPath(payload,'$.Values') | filter --expression=#jsonPath(payload,'$.Y').equals(0) | file --name=transform2 --dir=/tmp" --deploy
+Created and deployed new stream 'transform2'
+----
+ 
+Sending the exact same data as input, we should only see as output the line with the value specified on the filtering module:
+ +
+[source,bash]
+----
+ xd:>http post --target 'http://localhost:9040' --data '{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}'
+> POST (text/plain;Charset=UTF-8) http://localhost:9040 {Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
+> 200 OK
+----
+Checking the output..
+[source,bash]
+----
+$ cat /tmp/transform2.out 
+{X=1, Y=0, Z=0, key=1}
+----
+
 
 * Listening HTTP port and outputing to HDFS
 
