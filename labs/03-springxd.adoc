@@ -323,9 +323,19 @@ xd:>hadoop fs cat /xd/output-0.txt
 
 Now we're already splitting, filtering, transforming the input and sinking into HDFS we'll create a parallel stream data delivers the data to GemFire so we can consume that in real-time.
 
-+
+- Start the GemFire locator
+
 [source,bash]
 ----
+$ gfsh
+    _________________________     __
+   / _____/ ______/ ______/ /____/ /
+  / /  __/ /___  /_____  / _____  / 
+ / /__/ / ____/  _____/ / /    / /  
+/______/_/      /______/_/    /_/    v8.1.0
+
+Monitor and Manage GemFire
+
 gfsh>start locator --name=locator1 --J=-Dgemfire.http-service-port=7575
 Starting a GemFire Locator in /home/gpadmin/BigDataRoadshow/locator1...
 -
@@ -343,7 +353,7 @@ Successfully connected to: [host=ip-172-31-18-42.ec2.internal, port=1099]
 Cluster configuration service is up and running.
 ----
 
-+
+- Start a GemFire server
 [source,bash]
 ----
 gfsh>start server --name=server1 --J=-Dgemfire.start-dev-rest-api=true --J=-Dgemfire.http-service-port=8080
@@ -358,8 +368,8 @@ Log File: /home/gpadmin/BigDataRoadshow/server1/server1.log
 JVM Arguments: -Dgemfire.default.locators=172.31.18.42[10334] -Dgemfire.use-cluster-configuration=true -Dgemfire.start-dev-rest-api=true -Dgemfire.http-service-port=8080 -XX:OnOutOfMemoryError=kill -KILL %p -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
 Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivotal/gemfire/Pivotal_GemFire_810/lib/server-dependencies.jar
 ----
-jjj
-+
+ - Create a GemFire region for storing the data sent from Spring XD
+
 [source,bash]
 ----
 gfsh>create region --name=ValuesFromXD --type=REPLICATE
@@ -367,7 +377,8 @@ Member  | Status
 -
 server1 | Region "/ValuesFromXD" created on "server1"
 ----
-
+ - Create the Spring XD tap:
+ 
 We'll create our tap from the _"filter"_ step on the _"transformToHDFS"_ stream, so GemFire will receive the data already filtered but still in JSon format.
 On the XD shell, create the tap below:
 +
