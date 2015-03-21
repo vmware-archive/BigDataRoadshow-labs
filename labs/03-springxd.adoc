@@ -322,10 +322,10 @@ xd:>hadoop fs cat /xd/output-0.txt
 === Tapping for GemFire
 
 +
-+
+----
 gfsh>start locator --name=locator1 --J=-Dgemfire.http-service-port=7575
 Starting a GemFire Locator in /home/gpadmin/BigDataRoadshow/locator1...
-................................
+-
 Locator in /home/gpadmin/BigDataRoadshow/locator1 on ip-172-31-18-42.ec2.internal[10334] as locator1 is currently online.
 Process ID: 46044
 Uptime: 16 seconds
@@ -338,13 +338,13 @@ Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivota
 Successfully connected to: [host=ip-172-31-18-42.ec2.internal, port=1099]
 
 Cluster configuration service is up and running.
+----
 
 
-
-+
+----
 gfsh>start server --name=server1 --J=-Dgemfire.start-dev-rest-api=true --J=-Dgemfire.http-service-port=8080
 Starting a GemFire Server in /home/gpadmin/BigDataRoadshow/server1...
-..............
+-
 Server in /home/gpadmin/BigDataRoadshow/server1 on ip-172-31-18-42.ec2.internal[40404] as server1 is currently online.
 Process ID: 46391
 Uptime: 7 seconds
@@ -353,21 +353,28 @@ Java Version: 1.7.0_45
 Log File: /home/gpadmin/BigDataRoadshow/server1/server1.log
 JVM Arguments: -Dgemfire.default.locators=172.31.18.42[10334] -Dgemfire.use-cluster-configuration=true -Dgemfire.start-dev-rest-api=true -Dgemfire.http-service-port=8080 -XX:OnOutOfMemoryError=kill -KILL %p -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
 Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivotal/gemfire/Pivotal_GemFire_810/lib/server-dependencies.jar
-+
+----
+jjj
 
+----
 gfsh>create region --name=ValuesFromXD --type=REPLICATE
 Member  | Status
-------- | -------------------------------------------
+-
 server1 | Region "/ValuesFromXD" created on "server1"
-+
+----
 
 
+----
 xd:>stream create gemfireTap --definition "tap:stream:transformToHDFS.filter > object-to-json | gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=ValuesFromXD --keyExpression=payload.getField('key')" --deploy
 Created and deployed new stream 'gemfireTap'
+----
 
+
+----
 xd:>http post --target 'http://localhost:9020' --contentType application/json --data '{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}'
 > POST (application/json;charset=UTF-8) http://localhost:9020 {Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
 > 200 OK
+----
 
 
 ----
