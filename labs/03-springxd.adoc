@@ -373,6 +373,14 @@ Region | size | 1
  
 or you can also see the values using the Rest API URL [http://localhost:8888/gemfire-api/v1/ValuesFromXD] 
 
+
+Convert to CSV for Hawq to read:
+groovy
+csv = payload.get('X')+','+payload.get('Y')+','+payload.get('Z')+","+payload.get
+('key')
+return csv
+
+
 +
 +
 +
