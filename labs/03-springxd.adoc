@@ -300,9 +300,9 @@ xd:>stream destroy --name transformToHDFS
 ----
 
 and list the stream directory again, in use file suffix doesn’t exist anymore.
-Alternatively, as we already mentioned, one can change the rollover size to a smaller value, although for performance eficiency in HDFS bigger files are preferred. 
+Alternatively, as we already mentioned, one can change the rollover size to a smaller value, although for performance eficiency in HDFS bigger files are preferred. +
 
- +
+ 
 [source,bash]
 ----
 xd:>hadoop fs ls /xd
