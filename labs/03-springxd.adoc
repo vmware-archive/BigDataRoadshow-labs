@@ -67,7 +67,7 @@ xd:> stream list
 ----
 The list should be empty, meaning no streams currently exist.
 
-=== Creating a few simple streams
+=== Creating your first stream
 
 Let's start creating a few very simple data streams that will simply read data from different sources and directly output to select destinations. 
 
@@ -95,6 +95,8 @@ Destroyed stream 'stream1'
 
 ----
  
+=== Sinking to the filesystem
+
  Now let's change it a little in order to output to a file instead.
  
 * Reading the system's time and outputing to a file:
@@ -115,7 +117,7 @@ $ tail -f /tmp/mystream.out
 
 ----
 
-* Listening HTTP port and outputing to a file +
+=== Listening HTTP port and outputing to a file 
 
 As the next step on this exercise, let's change the _source_ to be something more useful than "time"  
 If we specify _http_, XD will automatically start listening to HTTP connections on a port, where we can submit our data to:
@@ -144,7 +146,7 @@ $ cat /tmp/fromhttp.out
 {Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
 ----
  
-* Extracting JSON data +
+=== Extracting and transforming JSON data 
  
 As a next step, we'll see how XD can be used to easily apply built-in transformations, like extracting specific fields from JSON requests on a data stream. +
 Deploy the following stream:
@@ -197,18 +199,112 @@ $ cat /tmp/transform2.out
 {X=1, Y=0, Z=0, key=1}
 ----
 
+ Cleaning up everything for the next exercise:
+[source,bash]
+----
+xd:>stream all destroy 
+Really destroy all streams? [y, n]: y
+Destroyed all streams
+----
+ 
+=== Sinking to HDFS 
+
+First we need to make sure Pivotal HD is started using the script provided. 
+If you're not sure, just check using _icm_client_
+ +
+[source,bash]
+----
+$ icm_client list
+Fetching installed clusters
+Installed Clusters:
+Cluster ID: 1	Cluster Name: pivhd	PHD Version: PHD-2.1.0.0	Status: started
+----
+In case it's stopped, use the Pivotal HD startup script as linked on the Desktop. 
+
+* Configuring Spring XD for HDFS access
+
+To configure the HDFS Namenode connection within Spring XD just use the command +hadoop config+
+ +
+[source,bash]
+----
+xd:>hadoop config fs --namenode hdfs://localhost:8020
+----
+Check connectivity by listening existing files on HDFS:
+ +
+[source,bash]
+----
+xd:>hadoop fs ls /
+Hadoop configuration changed, re-initializing shell...
+Found 8 items
+drwxr-xr-x   - hdfs    hadoop          0 2014-08-24 11:54 /apps
+drwxr-xr-x   - gpadmin hadoop          0 2014-08-24 12:02 /hawq_data
+drwxr-xr-x   - hdfs    hadoop          0 2014-08-24 11:56 /hive
+drwxr-xr-x   - mapred  hadoop          0 2014-08-24 11:55 /mapred
+drwxrwxrwx   - hdfs    hadoop          0 2014-08-24 11:55 /tmp
+drwxrwxrwx   - hdfs    hadoop          0 2015-03-14 04:07 /user
+drwxrwxrwx   - hdfs    hadoop          0 2015-03-17 08:08 /xd
+drwxr-xr-x   - hdfs    hadoop          0 2014-08-24 11:56 /yarn
+----
+Note the created *xd* directory, where Spring XD will output the streams created.
 
 * Listening HTTP port and outputing to HDFS
 
-xd:>hadoop config fs --namenode hdfs://localhost:8020
+Let's modify the previous stream to output to HDFS instead. 
+It only requires a conversion back to JSON and output to HDFS instead of file +
+From the XD shell window, type:
+ +
+[source,bash]
+----
+xd:>stream create transformToHDFS --definition "http --port=9020 | splitter --expression=#jsonPath(payload,'$.Values') | filter --expression=#jsonPath(payload,'$.Y').equals(0) | object-to-json | hdfs --directory=/xd --fileName=output" --deploy
+Created and deployed new stream 'transformToHDFS'
+----
+Sending some data in...
+ +
+[source,bash]
+----
+xd:>http post --target 'http://localhost:9020' --data '{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}'
+> POST (text/plain;Charset=UTF-8) http://localhost:9020 {Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
+> 200 OK
+----
+Now let's check the HDFS to see if we have the right data output:
+ +
+[source,bash]
+----
+xd:>hadoop fs ls /xd
+Found 3 items
+drwxrwxrwx   - root    hadoop          0 2015-03-04 14:49 /xd/connected-car
+-rw-r--r--   3 gpadmin hadoop          0 2015-03-22 03:47 /xd/output-0.txt.tmp
+drwxrwxrwx   - gpadmin hadoop          0 2015-03-17 08:10 /xd/s1
+----
 
-xd:>hadoop config fs --namenode hdfs://localhost:8020
+While the file is being written to it will have the tmp suffix. When the data written exceeds the rollover size (default 1GB) it will be renamed to remove the tmp suffix. 
 
-xd:> stream create --name myhdfsstream1 --definition "http | hdfs" --deploy
+When you destroy a stream
+ +
+[source,bash]
+----
+xd:>stream destroy --name transformToHDFS
+----
 
-xd:>hadoop fs ls /xd/myhdfsstream1
-Found 1 items
--rw-r--r--   3 jvalkealahti supergroup          0 2013-12-18 18:10 /xd/myhdfsstream1/myhdfsstream1-0.txt.tmp
+and list the stream directory again, in use file suffix doesn’t exist anymore.
+Alternatively, as we already mentioned, one can change the rollover size to a smaller value, although for performance eficiency in HDFS bigger files are preferred. 
+
+ +
+[source,bash]
+----
+xd:>hadoop fs ls /xd
+Found 3 items
+drwxrwxrwx   - root    hadoop          0 2015-03-04 14:49 /xd/connected-car
+-rw-r--r--   3 gpadmin hadoop         28 2015-03-22 04:00 /xd/output-0.txt
+drwxrwxrwx   - gpadmin hadoop          0 2015-03-17 08:10 /xd/s1
+----
+Now you can list the contents of the file.
+ +
+[source,bash]
+----
+xd:>hadoop fs cat /xd/output-0.txt
+{"X":1,"Y":0,"Z":0,"key":1}
+----
 
 +
 +
