@@ -208,7 +208,7 @@ Really destroy all streams? [y, n]: y
 Destroyed all streams
 ----
  
-=== Sinking to HDFS and reading with HAWQ
+=== Applying an additional transformation and sinking into HDFS 
 
 First we need to make sure Pivotal HD is started using the script provided. 
 If you're not sure, just check using _icm_client_
@@ -254,7 +254,7 @@ Let's modify the previous stream to output to HDFS instead. We could just output
 
 Creating a simple transformer in groovy:
 
-Create the file transform.groovy in your lab directory with the contents below:
+Create the file _transform.groovy_ in your lab directory with the contents below:
  +
 [source,groovy]
 ----
@@ -264,7 +264,7 @@ return csv
 
 That's it. We'll use that as a last step in our transformation, before sinking to HDFS.
 
-From the XD shell window, type:
+From the XD shell window, type (make sure you have the right path for the _transform.groovy_ file):
  +
 [source,bash]
 ----
@@ -362,13 +362,13 @@ server1 | Region "/ValuesFromXD" created on "server1"
 +
 
 
-
-xd:>stream create gemfireTap --definition "tap:stream:transformToHDFS.json > gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=ValuesFromXD --keyExpression=payload.getField('key')" --deploy
+xd:>stream create gemfireTap --definition "tap:stream:transformToHDFS.filter > object-to-json | gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=ValuesFromXD --keyExpression=payload.getField('key')" --deploy
 Created and deployed new stream 'gemfireTap'
 
 xd:>http post --target 'http://localhost:9020' --contentType application/json --data '{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}'
 > POST (application/json;charset=UTF-8) http://localhost:9020 {Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
 > 200 OK
+
 
 ----
 gfsh>describe region --name=/ValuesFromXD
@@ -385,140 +385,19 @@ Region | size | 1
  
 or you can also see the values using the Rest API URL [http://localhost:8888/gemfire-api/v1/ValuesFromXD] 
 
-
-Convert to CSV for Hawq to read:
-groovy
-csv = payload.get('X')+','+payload.get('Y')+','+payload.get('Z')+","+payload.get
-('key')
-return csv
-
-
-+
-+
-+
-+
-
-
-=== Applying a simple Data Filtering / Transformation
-
-For this example, we'll use Yahoo Query Language (YQL) REST interface to query quotes from our favorite stock.
-
-Using our browser, open https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quote%20where%20symbol%20in%20(%22EMC%22)&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&format=json
-
-{"query":
-     {"count":1,"created":"2015-03-16T07:05:57Z",
-      "lang":"en-US",
-      "results":{
-          "quote":{
-              "symbol":"EMC",
-              "AverageDailyVolume":
-              "15112500",
-              "Change":"-0.17",
-              "DaysLow":"25.49",
-              "DaysHigh":"26.08",
-              "YearLow":"24.92",
-              "YearHigh":"30.92",
-              "MarketCapitalization":"51.69B",
-              "LastTradePriceOnly":"26.00",
-              "DaysRange":"25.49 - 26.08",
-              "Name":"EMC Corporation Common Stock",
-              "Symbol":"EMC",
-              "Volume":"18974738",
-              "StockExchange":"NYQ"
-            }
-         }
-       }
-  }
-
-Note the response in JSON format. We can query the same data at each 3 seconds and output the result to XD's log file creating the stream:
-
-[source,shell]
 ----
-xd:> stream create stream1 --definition "trigger --fixedDelay=10 | http-client --url='''https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quote where symbol in (\"MSFT\")&format=json&env=store://datatables.org/alltableswithkeys''' --httpMethod=GET | log" --deploy 
+{
+  "ValuesFromXD" : [ {
+    "X" : 1,
+    "Y" : 0,
+    "Z" : 0,
+    "key" : 1
+  } ]
+}
 ----
-
-However, we're only interested on the *results* object of the json response, more specifically the *results.quote* object.
-
-So let's apply add quick filtering to only have that part of the result:  +splitter --expression=#jsonPath(payload,'$.query.results.quote')+ 
-
-[source,shell]
-----
-xd:> stream create stream1 --definition "trigger --fixedDelay=10 | http-client --url='''https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quote where symbol in (\"MSFT\")&format=json&env=store://datatables.org/alltableswithkeys''' --httpMethod=GET | splitter --expression=#jsonPath(payload,'$.query.results.quote') | log" --deploy 
-----
-
-You should see in the log only the stock quote data, eliminating all the header we were not interested on.
-
-=== Enriching with a simple Groovy script
-
-Create a file called __transform.groovy__  as following:
-
-[source,groovy]
-----
-payload.put("timestamp", headers.get('timestamp'))
-return payload
-----
-
-Those simple two lines will be responsible for adding the timestamp of the message to the JSON object containing the quote, as we'll use that to store in our in-memory grid.
-To verify the result, use the stream:
-
-[source,shell]
-----
-xd:> stream create stream1 --definition "trigger --fixedDelay=10 | http-client --url='''https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quote where symbol in (\"MSFT\")&format=json&env=store://datatables.org/alltableswithkeys''' --httpMethod=GET | splitter --expression=#jsonPath(payload,'$.query.results.quote') |  transform --script='file:[path_to_your_file]/transform.groovy' | log" --deploy 
-----
-
-=== Sinking the data into GemFire
-
-Start a GemFire server:
-
-[source,shell]
-----
-$ gfsh
-
-gfsh$ 
-
-BLA BLA BLA
-----
-
-Create a region called Stocks to hold the information Spring XD will be sinking there:
-
-[source,shell]
-----
-gfsh $ create region 
-
-BLA BLA BLA
-----
+nn
 
 
-Create the Spring XD stream that outputs the data already filtered and enriched into GemFire:
+=== Quering from HAWQ
 
-[source,shell]
-----
-stream create stream1 --definition "trigger --fixedDelay=3 | http-client --url='''https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.quote where symbol in (\"MSFT\")&format=json&env=store://datatables.org/alltableswithkeys''' --httpMethod=GET | splitter --expression=#jsonPath(payload,'$.query.results.quote') | transform --script='file:/Users/fmelo/FinanceStream/transform.groovy'| gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=Stocks --keyExpression=payload.getField('timestamp')" --deploy
-----
-
-
-=== Creating a second stream to read data from GemFire 
-
-[source,shell]
-----
-stream create stream2 --definition "gemfire --regionName=Stocks --useLocator=true --host=localhost --port=10334 | shell --command='Rscript /Users/fmelo/FinanceStream/test.R' | log " --deploy
-----
-
-
-
-
-Troubleshoot any issues until you have your first custom bosh release deployment!! (there are some corrections to be done!) The troubleshooting part is very important!! That's how you learn!!
-
-Hints: 
-
-- The failing canary will be kept by bosh for troubleshooting purposes
-- When testing, subsequent deployments should be done using __bosh deploy --recreate__ , otherwise new additional VMs will be created (canary won't be updated unless __--recreate__ is specified).
-- Check logs and try to understand what's going on. You can try to run the commands yourself once logged into the VM to understand what's wrong.
-- Dr Nick created a project called https://github.com/drnic/bosh-solo[BOSH-Solo] which helps testing BOSH releases. You might want to give it a try! (not mandatory)
-
-Good luck!! Next challenge is adding a Service Broker capable of provisioning PostgreSQL instances to the release you just created :)
-
-If you'd like to check the solution for this lab, clone this repo: https://github.com/Pivotal-Field-Engineering/postgres-bosh-release[postgres-bosh-release]
-
-
-xd:>stream create gemfireTap --definition "http --port=9020 | splitter --expression=#jsonPath(payload,'$.Values') | filter --expression=#jsonPath(payload,'$.Y').equals(0) | object-to-json | gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=ValuesFromXD --keyExpression=payload.getField('key')" --deploy
+- TDB -
