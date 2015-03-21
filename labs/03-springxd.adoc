@@ -389,7 +389,7 @@ Created and deployed new stream 'gemfireTap'
 ----
 
 Let's send some data to our original stream again.
-+
+
 [source,bash]
 ----
 xd:>http post --target 'http://localhost:9020' --contentType application/json --data '{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}'
