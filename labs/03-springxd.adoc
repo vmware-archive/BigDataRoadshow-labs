@@ -319,9 +319,12 @@ xd:>hadoop fs cat /xd/output-0.txt
 1,0,0,1
 ----
 
-=== Tapping for GemFire
+=== Tapping and inserting into GemFire
+
+Now we're already splitting, filtering, transforming the input and sinking into HDFS we'll create a parallel stream data delivers the data to GemFire so we can consume that in real-time.
 
 +
+[source,bash]
 ----
 gfsh>start locator --name=locator1 --J=-Dgemfire.http-service-port=7575
 Starting a GemFire Locator in /home/gpadmin/BigDataRoadshow/locator1...
@@ -340,7 +343,8 @@ Successfully connected to: [host=ip-172-31-18-42.ec2.internal, port=1099]
 Cluster configuration service is up and running.
 ----
 
-
++
+[source,bash]
 ----
 gfsh>start server --name=server1 --J=-Dgemfire.start-dev-rest-api=true --J=-Dgemfire.http-service-port=8080
 Starting a GemFire Server in /home/gpadmin/BigDataRoadshow/server1...
@@ -355,7 +359,8 @@ JVM Arguments: -Dgemfire.default.locators=172.31.18.42[10334] -Dgemfire.use-clus
 Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivotal/gemfire/Pivotal_GemFire_810/lib/server-dependencies.jar
 ----
 jjj
-
++
+[source,bash]
 ----
 gfsh>create region --name=ValuesFromXD --type=REPLICATE
 Member  | Status
@@ -363,19 +368,26 @@ Member  | Status
 server1 | Region "/ValuesFromXD" created on "server1"
 ----
 
-
+We'll create our tap from the _"filter"_ step on the _"transformToHDFS"_ stream, so GemFire will receive the data already filtered but still in JSon format.
+On the XD shell, create the tap below:
++
+[source,bash]
 ----
 xd:>stream create gemfireTap --definition "tap:stream:transformToHDFS.filter > object-to-json | gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=ValuesFromXD --keyExpression=payload.getField('key')" --deploy
 Created and deployed new stream 'gemfireTap'
 ----
 
-
+Let's send some data to our original stream again.
++
+[source,bash]
 ----
 xd:>http post --target 'http://localhost:9020' --contentType application/json --data '{Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}'
 > POST (application/json;charset=UTF-8) http://localhost:9020 {Values : [{"X":0,"Y":1,"Z":0,"key":0},{"X":1,"Y":0,"Z":0,"key":1}]}
 > 200 OK
 ----
 
+Now the data should not only be sinked as CSV into HDFS, but also be available in JSon format at GemFire.
+Let's confirm GemFire has received the data we've submitted:
 
 ----
 gfsh>describe region --name=/ValuesFromXD
@@ -389,8 +401,9 @@ Non-Default Attributes Shared By Hosting Members
 ------ | ---- | -----
 Region | size | 1
 ----
- 
-or you can also see the values using the Rest API URL [http://localhost:8888/gemfire-api/v1/ValuesFromXD] 
+
+As we can see, there's one value in, which we can easily verify using the GemFire's REST API:
+[http://localhost:8888/gemfire-api/v1/ValuesFromXD] 
 
 ----
 {
@@ -402,7 +415,7 @@ or you can also see the values using the Rest API URL [http://localhost:8888/gem
   } ]
 }
 ----
-nn
+
 
 
 === Quering from HAWQ
