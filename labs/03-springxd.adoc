@@ -403,7 +403,7 @@ Region | size | 1
 ----
 
 As we can see, there's one value in, which we can easily verify using the GemFire's REST API:
-[http://localhost:8888/gemfire-api/v1/ValuesFromXD] 
+link:http://localhost:8888/gemfire-api/v1/ValuesFromXD[http://localhost:8888/gemfire-api/v1/ValuesFromXD]
 
 ----
 {
