@@ -208,7 +208,7 @@ Really destroy all streams? [y, n]: y
 Destroyed all streams
 ----
  
-=== Sinking to HDFS 
+=== Sinking to HDFS and reading with HAWQ
 
 First we need to make sure Pivotal HD is started using the script provided. 
 If you're not sure, just check using _icm_client_
@@ -250,16 +250,28 @@ Note the created *xd* directory, where Spring XD will output the streams created
 
 * Listening HTTP port and outputing to HDFS
 
-Let's modify the previous stream to output to HDFS instead. 
-It only requires a conversion back to JSON and output to HDFS instead of file. Note we also added a label _"json:"_ at this step of the stream. We'll use that for our next stream. +
+Let's modify the previous stream to output to HDFS instead. We could just output the stream as-is to HDFS, but we'll convert it to CSV in order to be able to read with HAWQ.
+
+Creating a simple transformer in groovy:
+
+Create the file transform.groovy in your lab directory with the contents below:
+ +
+[source,groovy]
+----
+csv = payload.get('X')+','+payload.get('Y')+','+payload.get('Z')+","+payload.get('key')
+return csv
+----
+
+That's it. We'll use that as a last step in our transformation, before sinking to HDFS.
+
 From the XD shell window, type:
  +
 [source,bash]
 ----
-xd:>stream create transformToHDFS --definition "http --port=9020 | splitter --expression=#jsonPath(payload,'$.Values') | filter --expression=#jsonPath(payload,'$.Y').equals(0) | json: object-to-json | hdfs --directory=/xd --fileName=output" --deploy
+xd:>stream create transformToHDFS --definition "http --port=9020 | splitter --expression=#jsonPath(payload,'$.Values') | filter --expression=#jsonPath(payload,'$.Y').equals(0) | transform --script='file:/home/gpadmin/BigDataRoadshow/labs/json-to-csv.groovy'| hdfs --directory=/xd --fileName=output " --deploy
 Created and deployed new stream 'transformToHDFS'
 ----
-Sending some data in...
+Now send some data in...
  +
 [source,bash]
 ----
@@ -304,7 +316,7 @@ Now you can list the contents of the file. +
 [source,bash]
 ----
 xd:>hadoop fs cat /xd/output-0.txt
-{"X":1,"Y":0,"Z":0,"key":1}
+1,0,0,1
 ----
 
 === Tapping for GemFire
