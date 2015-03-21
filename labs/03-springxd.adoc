@@ -298,13 +298,15 @@ drwxrwxrwx   - root    hadoop          0 2015-03-04 14:49 /xd/connected-car
 -rw-r--r--   3 gpadmin hadoop         28 2015-03-22 04:00 /xd/output-0.txt
 drwxrwxrwx   - gpadmin hadoop          0 2015-03-17 08:10 /xd/s1
 ----
-Now you can list the contents of the file.
- +
+Now you can list the contents of the file. +
+ 
 [source,bash]
 ----
 xd:>hadoop fs cat /xd/output-0.txt
 {"X":1,"Y":0,"Z":0,"key":1}
 ----
+
+=== Tapping for GemFire
 
 +
 +
