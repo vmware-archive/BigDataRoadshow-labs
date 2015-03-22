@@ -98,7 +98,7 @@ Destroyed stream 'stream1'
 
 ----
  
-=== Sinking to the filesystem
+=== Sinking into the file system
 
  Now let's change it a little in order to output to a file instead.
  
