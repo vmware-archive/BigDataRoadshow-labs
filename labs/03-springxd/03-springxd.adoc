@@ -1,4 +1,4 @@
-== Spring XD overview lab
+== Spring XD lab
 
 This lab will go through a general overview using Spring XD. +
 For lab and demo purposes, we'll be using a single node system, although Spring XD will scale horizontally as needed.
