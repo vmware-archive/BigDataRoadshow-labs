@@ -3,9 +3,11 @@
 This lab will go through a general overview using Spring XD. +
 For lab and demo purposes, we'll be using a single node system, although Spring XD will scale horizontally as needed.
 
-Requirements
+Pre-Requisites
 
-- http://projects.spring.io/spring-xd/[Spring XD] v1.1.0 + installed 
+- http://projects.spring.io/spring-xd/[Spring XD] v1.1.0+ installed 
+- http://pivotal.io/big-data/pivotal-gemfire[GemFire] v8.1+ installed
+- http://pivotal.io/big-data/pivotal-hd[PHD+Hawq] v2.1+  installed
 
 === Starting Spring XD
 
