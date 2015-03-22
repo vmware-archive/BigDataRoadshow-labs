@@ -432,3 +432,14 @@ link:http://localhost:8888/gemfire-api/v1/ValuesFromXD[http://localhost:8888/gem
 === Quering from HAWQ
 
 - TDB -
+
+Kahler to complete?
+
+
+
+
+=== Final
+
+image::architecture.png[]
+
+
