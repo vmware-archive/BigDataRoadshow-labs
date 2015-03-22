@@ -383,7 +383,7 @@ server1 | Region "/ValuesFromXD" created on "server1"
  
 We'll create our tap from the _"filter"_ step on the _"transformToHDFS"_ stream, so GemFire will receive the data already filtered but still in JSon format.
 On the XD shell, create the tap below:
-+
+ +
 [source,bash]
 ----
 xd:>stream create gemfireTap --definition "tap:stream:transformToHDFS.filter > object-to-json | gemfire-json-server --useLocator=true --host=localhost --port=10334 --regionName=ValuesFromXD --keyExpression=payload.getField('key')" --deploy
