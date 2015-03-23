@@ -1,4 +1,4 @@
-on=/transaction --key="1" --value="Thomas"
+put --region=/transaction --key="1" --value="Thomas"
 put --region=/transaction --key="2" --value="Janet"
 put --region=/transaction --key="3" --value="Angela"
 put --region=/transaction --key="4" --value="Irene"
