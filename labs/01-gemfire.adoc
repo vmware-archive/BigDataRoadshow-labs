@@ -7,7 +7,7 @@ If using AWS, ensure the lab instructions are open on the AWS instance: +
 https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/blob/master/labs/01-gemfire.adoc +
 
 All instructions assume that the terminal session is started in the labs directory of the roadshow project. +
-If the work space has already been cloned from Git hub, skip the following step.
+If the work space has already been cloned from Git hub, skip the following step. +
 To get this project run the following command in the terminal: +
 [source]
 ----
@@ -39,8 +39,8 @@ Once the project is cloned, ensure that the terminal session is running in the l
 ----
 
 == Exploring gfsh
-gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes +
-Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster
+gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes. +
+Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster. +
 To start gfsh execute the following steps: +
 1. Right click on the desktop and select _Open In Terminal_ +
 2. In the terminal type "'gfsh'" +
