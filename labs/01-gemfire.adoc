@@ -85,7 +85,8 @@ Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/
 
 Successfully connected to: [host=192.168.75.9, port=1099]
 ----
-Congratulations, you now have the beginning of a Gemfire cluster. Wait for the previous command to finish before preceding to the next step. +
+Congratulations, you now have the beginning of a Gemfire cluster. +
+Wait for the previous command to finish before preceding to the next step. +
 
 == Log Into Pulse
 GemFire Pulse is a Web Application that provides a graphical dashboard for monitoring vital, real-time health and performance of GemFire clusters, members, and regions. +
