@@ -401,7 +401,11 @@ As before, watch the Pulse Data view while this command runs. +
 start server --name=serverB --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7577 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m --rebalance
 ----
 The Region was created, but nothing was rebalanced. Why? +
-List the Regions in gfsh for a clue. +
+List the Regions in gfsh for that Region for a clue. +
+[source]
+----
+list regions --member=serverB
+----
 To fix this run the following command in gfsh:
 [source,bash]
 ----
