@@ -319,6 +319,7 @@ ABC
 
 ----
 Another option to query data is to click the Data Browser table in Pulse. There is a query editor where OQL can be entered. The results are displayed below. +
+Type (rather than copy/paste) the same query into the web based Data browser in Pulse. +
 
 image::01-gemfire/images/pulse-data-browser.png[]
 
@@ -333,7 +334,7 @@ To do this a gfsh script will be used. +
 run --file=01-gemfire/transactions.gfsh
 ----
 Messages will scroll past in gfsh showing all the puts occuring. +
-To get the number of records in the region, run this OQL query in gfsh or the data browser:
+To get the number of records in the region, type and run this OQL query in gfsh or the data browser:
 [source,sql]
 ----
 select count(*) from /transaction
