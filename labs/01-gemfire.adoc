@@ -340,8 +340,8 @@ To get the number of records in the region, type and run this OQL query in gfsh 
 select count(*) from /transaction
 ----
 The result should be 1000. +
-By clicking the Data tab in Pulse it can be seen that the transaction region is now the largest. +
-Click on this region will show how the records are distributed. +
+By clicking the Cluster View -> Data in the navigation bar of Pulse it can be seen that the transaction region is now the largest. +
+Click on this region (the big grey box) will show how the records are distributed. +
 
 image::01-gemfire/images/transaction-region-distribution.png[]
 
