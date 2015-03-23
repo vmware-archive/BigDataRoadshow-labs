@@ -7,7 +7,7 @@ If using AWS, ensure the lab instructions are open on the AWS instance: +
 https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/blob/master/labs/01-gemfire.adoc +
 
 All instructions assume that the terminal session is started in the labs directory of the roadshow project. +
-If the work space has already been cloned from Git hub, skip the following step.
+If the work space has already been cloned from Git hub, skip the following step. +
 To get this project run the following command in the terminal: +
 [source]
 ----
@@ -39,8 +39,8 @@ Once the project is cloned, ensure that the terminal session is running in the l
 ----
 
 == Exploring gfsh
-gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes +
-Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster
+gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes. +
+Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster. +
 To start gfsh execute the following steps: +
 1. Right click on the desktop and select _Open In Terminal_ +
 2. In the terminal type "'gfsh'" +
@@ -85,7 +85,8 @@ Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/
 
 Successfully connected to: [host=192.168.75.9, port=1099]
 ----
-Congratulations, you now have the beginning of a Gemfire cluster. Wait for the previous command to finish before preceding to the next step. +
+Congratulations, you now have the beginning of a Gemfire cluster. +
+Wait for the previous command to finish before preceding to the next step. +
 
 == Log Into Pulse
 GemFire Pulse is a Web Application that provides a graphical dashboard for monitoring vital, real-time health and performance of GemFire clusters, members, and regions. +
@@ -319,6 +320,7 @@ ABC
 
 ----
 Another option to query data is to click the Data Browser table in Pulse. There is a query editor where OQL can be entered. The results are displayed below. +
+Type (rather than copy/paste) the same query into the web based Data browser in Pulse. +
 
 image::01-gemfire/images/pulse-data-browser.png[]
 
@@ -333,14 +335,14 @@ To do this a gfsh script will be used. +
 run --file=01-gemfire/transactions.gfsh
 ----
 Messages will scroll past in gfsh showing all the puts occuring. +
-To get the number of records in the region, run this OQL query in gfsh or the data browser:
+To get the number of records in the region, type and run this OQL query in gfsh or the data browser:
 [source,sql]
 ----
 select count(*) from /transaction
 ----
 The result should be 1000. +
-By clicking the Data tab in Pulse it can be seen that the transaction region is now the largest. +
-Click on this region will show how the records are distributed. +
+By clicking the Cluster View -> Data in the navigation bar of Pulse it can be seen that the transaction region is now the largest. +
+Click on this region (the big grey box) will show how the records are distributed. +
 
 image::01-gemfire/images/transaction-region-distribution.png[]
 
@@ -400,7 +402,11 @@ As before, watch the Pulse Data view while this command runs. +
 start server --name=serverB --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7577 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m --rebalance
 ----
 The Region was created, but nothing was rebalanced. Why? +
-List the Regions in gfsh for a clue. +
+List the Regions in gfsh for that Region for a clue. +
+[source]
+----
+list regions --member=serverB
+----
 To fix this run the following command in gfsh:
 [source,bash]
 ----
