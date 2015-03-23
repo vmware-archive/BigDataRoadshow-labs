@@ -2,6 +2,42 @@
 = Gemfire Lab
 The purpose of this lab is to get a basic understanding of how a Gemfire cluster works and how it can be used.
 
+== Prerequisites
+If using AWS, ensure the lab instructions are open on the AWS instance: +
+https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/blob/master/labs/01-gemfire.adoc +
+
+All instructions assume that the terminal session is started in the labs directory of the roadshow project. +
+If the work space has already been cloned from Git hub, skip the following step.
+To get this project run the following command in the terminal: +
+[source]
+----
+git clone https://github.com/Pivotal-Field-Engineering/BigDataRoadshow.git
+----
+The output will look something like this:
+[source]
+----
+[pivhdsne:Desktop]$ git clone https://github.com/Pivotal-Field-Engineering/BigDataRoadshow.git
+git: /usr/local/hawq/./lib/libz.so.1: no version information available (required by git)
+Initialized empty Git repository in /home/gpadmin/Desktop/BigDataRoadshow/.git/
+git-remote-https: /usr/local/hawq/./lib/libz.so.1: no version information available (required by git-remote-https)
+git: /usr/local/hawq/./lib/libz.so.1: no version information available (required by git)
+remote: Counting objects: 563, done.
+remote: Compressing objects: 100% (17/17), done.
+git: /usr/local/hawq/./lib/libz.so.1: no version information available (required by git)
+remote: Total 563 (delta 8), reused 0 (delta 0), pack-reused 546
+Receiving objects: 100% (563/563), 21.51 MiB | 22.16 MiB/s, done.
+Resolving deltas: 100% (353/353), done.
+----
+Once the project is cloned, ensure that the terminal session is running in the labs directory.
+[source]
+----
+[pivhdsne:Desktop]$ cd BigDataRoadshow
+[pivhdsne:BigDataRoadshow]$ cd labs/
+[pivhdsne:labs]$ ls
+01-gemfire  01-gemfire.adoc  02-phd-hawq  03-springxd  preparing_labs.pptx
+[pivhdsne:labs]$
+----
+
 == Exploring gfsh
 gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes +
 Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster
