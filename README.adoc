@@ -1,6 +1,6 @@
-= Pivotal Big Data Roadshow Workshop 
+= Pivotal Big Data Roadshow 
 
-Content for the Pivotal Cloud Platform Roadshow (http://pivotal.io/big-data/data-roadshow).
+Content for the Pivotal Big Data Roadshow (http://pivotal.io/big-data/data-roadshow).
 
 == Workshop Flow
 
