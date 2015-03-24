@@ -26,8 +26,6 @@ So far this consists of:
 == Environment
 
 The labs are built for running on any environment with the right products installed.  
-For making it simpler, we'll deliver them leveraging:
- * Amazon AMIs [info to be linked]
- * VM distributed as a thumb drive 
+For making it simpler, we'll deliver them as VMs.
  
 VMs are delivered with the products installed, and labs will be cloned from this Github repo (containing instructions and scripts)
