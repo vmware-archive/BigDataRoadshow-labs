@@ -34,7 +34,7 @@ hdfs dfs -ls /
 
 for the labs we need to create a diretory to put data
 
-hdfs dfs --mkdir /user/sample
+hdfs dfs -mkdir /user/sample
 
 verify that the directory was created
 
