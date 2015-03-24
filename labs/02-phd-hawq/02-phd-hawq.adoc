@@ -21,6 +21,11 @@ bash ~/Desktop/start_all.sh
 Wait for the cluster start process to finish
 Once the cluster is up and running you should be able to query hdfs via the command line
 
+=== Cleaning up HDFS
+
+To make sure system is clean in order to walk through the excersices run
+./pre_clean.sh
+
 === Accessing Hadoop (HDFS)
 
 open a terminal and from the command line run

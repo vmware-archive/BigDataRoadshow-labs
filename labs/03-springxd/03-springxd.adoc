@@ -433,12 +433,29 @@ link:http://localhost:8888/gemfire-api/v1/ValuesFromXD[http://localhost:8888/gem
 
 === Quering from HAWQ
 
-- TDB -
+We will now create a table that can quey the data that is being written to HDFS
 
-Kahler to complete?
+[source,sql]
+----
+CREATE EXTERNAL TABLE test (
+  X int,
+  Y int,
+  Z int,
+  key int )
+LOCATION
+('pxf://pivhdsne.localdomain:50070/xd/output-*.txt?profile=HdfsTextSimple')
+FORMAT 'CSV'
+LOG ERRORS INTO test_err SEGMENT REJECT LIMIT 10;
 
 
+Now execute the following query
 
+psql -c 'select * from test'
+
+ x | y | z | key 
+---+---+---+-----
+ 1 | 0 | 0 |   1
+(1 row)
 
 === Final
 
