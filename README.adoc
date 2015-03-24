@@ -1,32 +1,33 @@
-= Pivotal Big Data Roadshow 
+= Pivotal Big Data Roadshow  - Hands-on Technical Workshop
 
-Content for the Pivotal Big Data Roadshow (http://pivotal.io/big-data/data-roadshow).
+Lab content for the Pivotal Big Data Roadshow (http://pivotal.io/big-data/data-roadshow).
 
-== Workshop Flow
+== Roadshow Agenda 
 
 The usual flow is the following:
 
-TODO: Add agenda
+- 09:00 - 10:15: "The Journey to Becoming a Data-Driven Enterprise"
+- 10:15 - 10:30: Coffee Break
+- 10:30 - 12:00: Internet of Things Demo and Architecture Overview
+- 12:00 - 1:00:  Lunch & Birds of a Feather Discussion
+- 1:00  - 3:00:  Hands-On Technical Workshop
 
-The sessions are as follows:
-
-TODO: Sessions description
+This repository contains the material for the Hands-on Technical Workshop sessions
 
 == Contents
 
 So far this consists of:
 
 * this README
-* a link:prerequisites.adoc[prerequisites.adoc] doc
-* the link:decks[Slide Decks] (in Keynote or PPTx format)
-* the link:labs[Labs] (in adoc format)
+* link:prerequisites.adoc[GemFire Lab] 
+* link:decks[PHD and Hawq Lab] (in Keynote or PPTx format)
+* link:labs[Labs] (Data Streaming with Spring XD)
 
 == Environment
 
 The labs are built for running on any environment with the right products installed.  
-For making it simpler and avoiding further risks, we'll deliver them leveraging
+For making it simpler, we'll deliver them leveraging:
  * Amazon AMIs [info to be linked]
  * VM distributed as a thumb drive 
  
-VMs are delivered with the products installed, and labs will be cloned from this Github repo (containing instructions, scripts and small binaries / sources)
-
+VMs are delivered with the products installed, and labs will be cloned from this Github repo (containing instructions and scripts)
