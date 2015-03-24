@@ -1,4 +1,4 @@
-== Spring XD lab
+== Data Streaming with Spring XD 
 
 This lab will go through a general overview using Spring XD. +
 For lab and demo purposes, we'll be using a single node system, although Spring XD will scale horizontally as needed.
@@ -457,7 +457,7 @@ psql -c 'select * from test'
  1 | 0 | 0 |   1
 (1 row)
 
-=== Final
+----
 
 image::architecture.png[]
 
