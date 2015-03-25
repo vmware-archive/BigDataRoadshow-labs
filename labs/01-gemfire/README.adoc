@@ -3,12 +3,11 @@
 The purpose of this lab is to get a basic understanding of how a Gemfire cluster works and how it can be used.
 
 == Prerequisites
-If using AWS, ensure the lab instructions are open on the AWS instance: +
-https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/blob/master/labs/01-gemfire.adoc +
-
-All instructions assume that the terminal session is started in the labs directory of the roadshow project. +
-If the work space has already been cloned from Git hub, skip the following step. +
-To get this project run the following command in the terminal: +
+=== AWS Workspace Set Up
+If you are using the Big Data Roadshow VM, this step has already been completed. In this case, proceed to the next step. +
+For AWS, the BigDataShow workspace needs to be set up. +
+To get this project, run the following command in the terminal. To make things easier, start this terminal session from the Desktop. +
+_Tip:_ To easily start a terminal session, right click on the desktop and select 'Open in Terminal'. +
 [source]
 ----
 git clone https://github.com/Pivotal-Field-Engineering/BigDataRoadshow.git
@@ -28,7 +27,10 @@ remote: Total 563 (delta 8), reused 0 (delta 0), pack-reused 546
 Receiving objects: 100% (563/563), 21.51 MiB | 22.16 MiB/s, done.
 Resolving deltas: 100% (353/353), done.
 ----
-Once the project is cloned, ensure that the terminal session is running in the labs directory.
+
+=== Setting up the terminal session
+All instructions assume that the terminal session is started in the labs directory of the roadshow project. +
+Within the terminal execute the following steps: +
 [source]
 ----
 [pivhdsne:Desktop]$ cd BigDataRoadshow
@@ -38,16 +40,30 @@ Once the project is cloned, ensure that the terminal session is running in the l
 [pivhdsne:labs]$
 ----
 
+=== Open up the labs instructions
+Ensure the lab instructions are open in a browser window: +
+https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/blob/master/labs/01-gemfire.adoc +
+
+
 == Exploring gfsh
 gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes. +
 Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster. +
-To start gfsh execute the following steps: +
-1. Right click on the desktop and select _Open In Terminal_ +
-2. In the terminal type "'gfsh'" +
-
-The following interface will appear:
+All instructions assume commands are being executed in gfsh and also that gfsh was launched from the labs folder of the BigDataRoadShow workspace. +
+To get this folder do the following: +
 [source]
 ----
+[pivhdsne:Desktop]$ cd BigDataRoadshow
+[pivhdsne:BigDataRoadshow]$ cd labs/
+[pivhdsne:labs]$ ls
+01-gemfire  01-gemfire.adoc  02-phd-hawq  03-springxd  preparing_labs.pptx
+[pivhdsne:labs]$
+----
+From within labs folder start up a gfsh session: +
+[source]
+----
+[pivhdsne:labs]$ pwd
+/home/gpadmin/Desktop/BigDataRoadshow/labs
+[pivhdsne:labs]$ gfsh
     _________________________     __
    / _____/ ______/ ______/ /____/ /
   / /  __/ /___  /_____  / _____  / 
@@ -66,24 +82,25 @@ This locator will be the first member in the cluster and will act as the members
 Copy and paste the following command into gfsh: +
 [source,bash]
 ----
-start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
+start locator --name=locatorA --enable-cluster-configuration=false --J=-Dgemfire.http-service-port=7575
 ----
 
 The command will produce an output similar to this: +
 [source,bash]
 ----
-gfsh>start locator --name=locatorA --enable-cluster-configuration=false --port=10334 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7575
-Starting a GemFire Locator in /home/gemfire/locatorA...
-Locator in /home/gemfire/locatorA on 192.168.75.9[10334] as locatorA is currently online.
-Process ID: 67956
-Uptime: 16 seconds
+gfsh>start locator --name=locatorA --enable-cluster-configuration=false --J=-Dgemfire.http-service-port=7575
+Starting a GemFire Locator in /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorA...
+...
+Locator in /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorA on ip-172-31-35-243.ec2.internal[10334] as locatorA is currently online.
+Process ID: 31260
+Uptime: 4 seconds
 GemFire Version: 8.1.0
-Java Version: 1.7.0_71
-Log File: /home/gemfire/locatorA/locatorA.log
-JVM Arguments: -Dgemfire.enable-cluster-configuration=false -Dgemfire.load-cluster-configuration-from-dir=false -Dgemfire.log-level=config -Xms64m -Xmx64m -Dgemfire.http-service-port=7575 -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
-Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/locator-dependencies.jar_
+Java Version: 1.7.0_45
+Log File: /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorA/locatorA.log
+JVM Arguments: -Dgemfire.enable-cluster-configuration=false -Dgemfire.load-cluster-configuration-from-dir=false -Dgemfire.http-service-port=7575 -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
+Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivotal/gemfire/Pivotal_GemFire_810/lib/locator-dependencies.jar
 
-Successfully connected to: [host=192.168.75.9, port=1099]
+Successfully connected to: [host=ip-172-31-35-243.ec2.internal, port=1099]
 ----
 Congratulations, you now have the beginning of a Gemfire cluster. +
 Wait for the previous command to finish before preceding to the next step. +
@@ -94,7 +111,10 @@ With the first locator started, Pulse is now available. +
 To use Pulse, open a browser and enter this URL in the address bar: +
 http://localhost:7575/pulse/Login.html +
 
-Log In with the following credentials: +
+Alternatively the following command can be typed into gfsh to launch Pulse in the browser: +
+start pulse --url=http://localhost:7575/pulse
+
+Log into Pulse with the following credentials: +
 username: *admin* +
 password: *admin* +
 Once logged in click on green server box Icon in the Cluster View to see the Gemfire processes running on the server. +
@@ -108,19 +128,22 @@ This locator will join with the first giving the cluster fail over for Locator f
 Return to the gfsh session and enter the following command: +
 [source,bash]
 ----
-start locator --name=locatorB --enable-cluster-configuration=false --locators=127.0.0.1[10334],127.0.0.1[10335] --port=10335 --log-level=config --J=-Xms64m --J=-Xmx64m --J=-Dgemfire.http-service-port=7576
+start locator --name=locatorB --enable-cluster-configuration=false --locators=127.0.0.1[10334],127.0.0.1[10335] --port=10335 --J=-Dgemfire.http-service-port=7576
 ----
 The resulting output should look like the following: +
 [source]
 ----
-Locator in /home/gemfire/locatorB on 192.168.75.9[10335] as locatorB is currently online.
-Process ID: 72956
+gfsh>start locator --name=locatorB --enable-cluster-configuration=false --locators=127.0.0.1[10334],127.0.0.1[10335] --port=10335 --J=-Dgemfire.http-service-port=7576
+Starting a GemFire Locator in /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorB...
+.........
+Locator in /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorB on ip-172-31-35-243.ec2.internal[10335] as locatorB is currently online.
+Process ID: 32282
 Uptime: 4 seconds
 GemFire Version: 8.1.0
-Java Version: 1.7.0_71
-Log File: /home/gemfire/locatorB/locatorB.log
-JVM Arguments: -Dgemfire.locators=127.0.0.1[10334],127.0.0.1[10335] -Dgemfire.enable-cluster-configuration=false -Dgemfire.load-cluster-configuration-from-dir=false -Dgemfire.log-level=config -Xms64m -Xmx64m -Dgemfire.http-service-port=7576 -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
-Class-Path: /home/gemfire/gemfire/Pivotal_GemFire/lib/gemfire.jar:/home/gemfire/gemfire/Pivotal_GemFire/lib/locator-dependencies.jar
+Java Version: 1.7.0_45
+Log File: /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorB/locatorB.log
+JVM Arguments: -Dgemfire.locators=127.0.0.1[10334],127.0.0.1[10335] -Dgemfire.enable-cluster-configuration=false -Dgemfire.load-cluster-configuration-from-dir=false -Dgemfire.http-service-port=7576 -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
+Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivotal/gemfire/Pivotal_GemFire_810/lib/locator-dependencies.jar
 ----
 
 Pulse will now show two locator processes. Also in the panel across the top the Total Heap, Members and Locators counts will have increased.
@@ -168,13 +191,18 @@ serverA  | 192.168.75.9(serverA:88547)<v2>:24402
 locatorA | 192.168.75.9(locatorA:72292:locator)<v0>:58229
 ----
 
-== Add the Rest of the Members
-To add the rest of the members in the grid, enter each line into gfsh. Wait for the command to complete and the process to start before entering the next command.
+== Add more Members
+To add the rest of the members in the grid, the commands look like this. +
 [source,bash]
 ----
 start server --name=serverB --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7578 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m
 start server --name=serverC --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7579 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m
 start server --name=serverD --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7580 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m
+----
+To save time these have been bundled up into a single file that can be executed from gfsh. Execute the following command (this will only work if gfsh was started from the labs folder of the workspace): +
+[source]
+----
+gfsh>run --file=01-gemfire/start-more-servers.gfsh
 ----
 At the end of this process a cluster with six members should be visible in gfsh and pulse.
 [source,bash]
@@ -240,17 +268,12 @@ By click on this grey box, Pulse will show how the data is distributed across th
 
 image::images/pulse-data-first-region-members.png[]
 
-Create another replicated Region:
-[source,bash]
-----
-create region --name=customer --type=REPLICATE
-----
 Now create a Partitioned Region.
 [source,bash]
 ----
 create region --name=transaction --type=PARTITION --redundant-copies=1
 ----
-When using the tab key, the options for Partitioned regions may have come up.
+For an extra bonus, when using the tab key, the options for Partitioned regions may have come up.
 [source]
 ----
 PARTITION                                 
@@ -335,10 +358,10 @@ To do this a gfsh script will be used. +
 run --file=01-gemfire/transactions.gfsh
 ----
 Messages will scroll past in gfsh showing all the puts occuring. +
-To get the number of records in the region, type and run this OQL query in gfsh or the data browser:
+To get the number of records in the region, type and run this OQL query in gfsh or the data browser of Pulse (the query needs to be typed into the web based data browser - copy paste will not work):
 [source,sql]
 ----
-select count(*) from /transaction
+query --query="select count(*) from /transaction"
 ----
 The result should be 1000. +
 By clicking the Cluster View -> Data in the navigation bar of Pulse it can be seen that the transaction region is now the largest. +
@@ -439,6 +462,96 @@ image::images/gemfire-pdx.png[]
 GemFire's Portable Data eXchange (PDX) is a cross-language data format that can reduce the cost of distributing and serializing your objects. PDX stores data in named fields that you can access individually, to avoid the cost of deserializing the entire data object. PDX also allows you to mix versions of objects where you have added or removed fields. +
 
 **This concludes the Lab. Thank you for your attention**
+
+== Trouble Shooting
+
+=== Unable to open Firefox in AWS instance
+When using an RDP client to connect to AWS, there may be a situation where the desktop render is updated and the running Firefox application is lost from view. +
+When attempting to start a new Firefox session, a pop up might be shown stating there is an existing session. +
+To fix this run the following commands from a terminal session: +
+[source]
+----
+[pivhdsne:Desktop]$ ps -ef | grep firefox
+gpadmin    8207      1  7 Mar25 ?        01:50:17 /usr/lib64/firefox/firefox
+gpadmin   31466  31456  0 02:08 pts/7    00:00:00 grep firefox
+[pivhdsne:Desktop]$ kill -9 8207
+----
+
+== Invalid Option Error when running commands
+When running the commands from the labs, if errors like the following are experienced, ensure these commands are being put into a gfsh session or not just the linux terminal +
+[source]
+----
+[pivhdsne:labs]$ start locator --name=locatorA --enable-cluster-configuration=false --J=-Dgemfire.http-service-port=7575
+start: invalid option: --name=locatorA
+Try `start --help' for more information.
+----
+
+=== A Gemfire Process Does Not Start
+When running a start locator or start server command in gfsh, you may see an error like this: +
+[source]
+----
+gfsh>start locator --name=locatorA --enable-cluster-configuration=false --J=-Dgemfire.http-service-port=7575
+Starting a GemFire Locator in /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorA...
+The Locator process terminated unexpectedly with exit status 1. Please refer to the log file in /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorA for full details.
+
+Exception in thread "main" java.lang.RuntimeException: A PID file already exists and a Locator may be running in /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorA on ip-172-31-35-243.ec2.internal[10334].
+    at com.gemstone.gemfire.distributed.LocatorLauncher.start(LocatorLauncher.java:620)
+    at com.gemstone.gemfire.distributed.LocatorLauncher.run(LocatorLauncher.java:507)
+    at com.gemstone.gemfire.distributed.LocatorLauncher.main(LocatorLauncher.java:187)
+Caused by: com.gemstone.gemfire.internal.process.FileAlreadyExistsException: Pid file already exists: /home/gpadmin/Desktop/BigDataRoadshow/labs/locatorA/vf.gf.locator.pid for process 8247
+    at com.gemstone.gemfire.internal.process.LocalProcessLauncher.writePid(LocalProcessLauncher.java:105)
+    at com.gemstone.gemfire.internal.process.LocalProcessLauncher.<init>(LocalProcessLauncher.java:53)
+    at com.gemstone.gemfire.internal.process.ControllableProcess.<init>(ControllableProcess.java:36)
+    at com.gemstone.gemfire.distributed.LocatorLauncher.start(LocatorLauncher.java:587)
+    ... 2 more
+----
+This means there is already a server running in this folder location. This server can be used as its already running, or the process can killed. +
+Stopping the process from the terminal by calling gfsh and referencing the directory:
+[source]
+----
+[pivhdsne:labs]$ gfsh stop locator --dir=locatorA
+............
+[pivhdsne:labs]$ 
+----
+
+=== Importing Data/Adding More Servers Failed
+When running the data import or adding more servers, if a 'doesn't exist' error occurs it is because the gfsh session was not started from the labs directory. +
+[source]
+----
+gfsh>run --file=01-gemfire/start-more-servers.gfsh
+01-gemfire/start-more-servers.gfsh doesn't exist.
+gfsh>run --file=01-gemfire/transactions.gfsh
+01-gemfire/transactions.gfsh doesn't exist.
+----
+Fixing this error: +
+[source]
+----
+gfsh>run --file=01-gemfire/start-more-servers.gfsh
+01-gemfire/start-more-servers.gfsh doesn't exist.
+gfsh>run --file=01-gemfire/transactions.gfsh
+01-gemfire/transactions.gfsh doesn't exist.
+gfsh>exit
+Exiting... 
+[pivhdsne:BigDataRoadshow]$ pwd
+/home/gpadmin/Desktop/BigDataRoadshow
+[pivhdsne:BigDataRoadshow]$ cd labs/
+[pivhdsne:labs]$ gfsh
+    _________________________     __
+   / _____/ ______/ ______/ /____/ /
+  / /  __/ /___  /_____  / _____  / 
+ / /__/ / ____/  _____/ / /    / /  
+/______/_/      /______/_/    /_/    v8.1.0
+
+Monitor and Manage GemFire
+gfsh>run --file=01-gemfire/start-more-servers.gfsh
+1. Executing - start server --name=serverB --use-cluster-configuration=false --server-port=0 --locators=127.0.0.1[10334],127.0.0.1[10335] --J=-Dgemfire.http-service-port=7578 --J=-Dgemfire.start-dev-rest-api=true --J=-Xms128m --J=-Xmx128m
+
+Starting a GemFire Server in /home/gpadmin/Desktop/BigDataRoadshow/labs/serverB...
+----
+
+
+
+
 
 
 
