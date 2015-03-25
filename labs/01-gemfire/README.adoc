@@ -191,7 +191,7 @@ serverA  | 192.168.75.9(serverA:88547)<v2>:24402
 locatorA | 192.168.75.9(locatorA:72292:locator)<v0>:58229
 ----
 
-== Add the Rest of the Members
+== Add more Members
 To add the rest of the members in the grid, the commands look like this. +
 [source,bash]
 ----
