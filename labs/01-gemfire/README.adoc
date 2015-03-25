@@ -41,13 +41,22 @@ Once the project is cloned, ensure that the terminal session is running in the l
 == Exploring gfsh
 gfsh (Gemfire shell) is a interactive command line interface that allows you to, manage, moniter and administrate Gemfire processes. +
 Through out this lab gfsh will be used to start and stop processes and also to initiate other commands to the cluster. +
-To start gfsh execute the following steps: +
-1. Right click on the desktop and select _Open In Terminal_ +
-2. In the terminal type "'gfsh'" +
-
-The following interface will appear:
+All instructions assume commands are being executed in gfsh and also that gfsh was launched from the labs folder of the BigDataRoadShow workspace. +
+To get this folder do the following: +
 [source]
 ----
+[pivhdsne:Desktop]$ cd BigDataRoadshow
+[pivhdsne:BigDataRoadshow]$ cd labs/
+[pivhdsne:labs]$ ls
+01-gemfire  01-gemfire.adoc  02-phd-hawq  03-springxd  preparing_labs.pptx
+[pivhdsne:labs]$
+----
+From within labs folder start up a gfsh session: +
+[source]
+----
+[pivhdsne:labs]$ pwd
+/home/gpadmin/Desktop/BigDataRoadshow/labs
+[pivhdsne:labs]$ gfsh
     _________________________     __
    / _____/ ______/ ______/ /____/ /
   / /  __/ /___  /_____  / _____  / 
