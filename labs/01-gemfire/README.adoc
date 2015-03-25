@@ -41,7 +41,7 @@ Within the terminal execute the following steps: +
 ----
 
 === Open up the labs instructions
-If using AWS, ensure the lab instructions are open on the AWS instance: +
+Ensure the lab instructions are open in a browser window: +
 https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/blob/master/labs/01-gemfire.adoc +
 
 
