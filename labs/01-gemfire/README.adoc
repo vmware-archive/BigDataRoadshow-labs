@@ -467,7 +467,7 @@ GemFire's Portable Data eXchange (PDX) is a cross-language data format that can 
 
 === Unable to open Firefox in AWS instance
 When using an RDP client to connect to AWS, there may be a situation where the desktop render is updated and the running Firefox application is lost from view. +
-When attempting to start a new Firefox the following pop up might be shown. +
+When attempting to start a new Firefox session, a pop up might be shown stating there is an existing session. +
 To fix this run the following commands from a terminal session: +
 [source]
 ----
