@@ -19,9 +19,9 @@ This repository contains the material for the Hands-on Technical Workshop sessio
 So far this consists of:
 
 * this README
-* link:labs/gemfire[GemFire Lab] 
-* link:labs/phd-hawq[PHD and Hawq]
 * link:labs/springxd[Data Streaming with Spring XD, GemFire and PHD]
+* link:labs/gemfire[GemFire Overview Lab] 
+* link:labs/phd-hawq[PHD and Hawq Overview Lab]
 
 == Environment
 
