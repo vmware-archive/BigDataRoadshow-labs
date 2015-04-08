@@ -433,7 +433,7 @@ link:http://localhost:8888/gemfire-api/v1/ValuesFromXD[http://localhost:8888/gem
 
 === Quering from HAWQ
 
-We will now create a table that can quey the data that is being written to HDFS
+We will now create a table that can query the data that is being written to HDFS
 
 [source,sql]
 ----
