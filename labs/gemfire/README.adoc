@@ -55,7 +55,7 @@ To get this folder do the following: +
 [pivhdsne:Desktop]$ cd BigDataRoadshow-labs
 [pivhdsne:BigDataRoadshow]$ cd labs/
 [pivhdsne:labs]$ ls
-01-gemfire  01-gemfire.adoc  02-phd-hawq  03-springxd  preparing_labs.pptx
+gemfire  phd-hawq  preparing_labs.pdf  springxd
 [pivhdsne:labs]$
 ----
 From within labs folder start up a gfsh session: +
