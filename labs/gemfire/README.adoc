@@ -36,7 +36,7 @@ Within the terminal execute the following steps: +
 [pivhdsne:Desktop]$ cd BigDataRoadshow
 [pivhdsne:BigDataRoadshow]$ cd labs/
 [pivhdsne:labs]$ ls
-01-gemfire  01-gemfire.adoc  02-phd-hawq  03-springxd  preparing_labs.pptx
+gemfire  phd-hawq  preparing_labs.pdf  springxd
 [pivhdsne:labs]$
 ----
 
