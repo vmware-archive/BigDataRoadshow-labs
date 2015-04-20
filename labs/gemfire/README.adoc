@@ -355,7 +355,7 @@ In this step data will be added to the Partitioned Region. +
 To do this a gfsh script will be used. +
 [source,bash]
 ----
-run --file=01-gemfire/transactions.gfsh
+run --file=gemfire/transactions.gfsh
 ----
 Messages will scroll past in gfsh showing all the puts occuring. +
 To get the number of records in the region, type and run this OQL query in gfsh or the data browser of Pulse (the query needs to be typed into the web based data browser - copy paste will not work):
