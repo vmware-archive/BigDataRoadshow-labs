@@ -202,7 +202,7 @@ start server --name=serverD --use-cluster-configuration=false --server-port=0 --
 To save time these have been bundled up into a single file that can be executed from gfsh. Execute the following command (this will only work if gfsh was started from the labs folder of the workspace): +
 [source]
 ----
-gfsh>run --file=01-gemfire/start-more-servers.gfsh
+gfsh>run --file=gemfire/start-more-servers.gfsh
 ----
 At the end of this process a cluster with six members should be visible in gfsh and pulse.
 [source,bash]
