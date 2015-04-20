@@ -270,7 +270,7 @@ From the XD shell window, type (make sure you have the right path for the _trans
  +
 [source,bash]
 ----
-xd:>stream create transformToHDFS --definition "http --port=9020 | splitter --expression=#jsonPath(payload,'$.Values') | filter --expression=#jsonPath(payload,'$.Y').equals(0) | transform --script='file:/home/gpadmin/BigDataRoadshow/labs/json-to-csv.groovy'| hdfs --directory=/xd --fileName=output " --deploy
+xd:>stream create transformToHDFS --definition "http --port=9020 | splitter --expression=#jsonPath(payload,'$.Values') | filter --expression=#jsonPath(payload,'$.Y').equals(0) | transform --script='file:/home/gpadmin/Desktop/BigDataRoadshow/labs/transform.groovy'| hdfs --directory=/xd --fileName=output " --deploy
 Created and deployed new stream 'transformToHDFS'
 ----
 Now send some data in...
