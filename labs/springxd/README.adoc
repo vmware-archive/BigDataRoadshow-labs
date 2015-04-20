@@ -294,11 +294,11 @@ drwxrwxrwx   - gpadmin hadoop          0 2015-03-17 08:10 /xd/s1
 
 While the file is being written to it will have the tmp suffix. When the data written exceeds the rollover size (default 1GB) it will be renamed to remove the tmp suffix. 
 
-When you destroy a stream
+When you undeploy a stream
  +
 [source,bash]
 ----
-xd:>stream destroy --name transformToHDFS
+xd:>stream undeploy --name transformToHDFS
 ----
 
 and list the stream directory again, in use file suffix doesn’t exist anymore.
@@ -324,6 +324,15 @@ xd:>hadoop fs cat /xd/output-0.txt
 === Tapping and inserting into GemFire
 
 Now we're already splitting, filtering, transforming the input and sinking into HDFS we'll create a parallel stream data delivers the data to GemFire so we can consume that in real-time.
+
+But first, lets deploy the transformToHDFS stream so we have something to tap into.
+
+----
+xd:>stream deploy --name transformToHDFS
+Deployed stream 'transformToHDFS'
+----
+
+Now we will start a small Gemfire cluster on this machine, starting with the Locator process. We will cover Gemfire locators and servers in another lab.
 
 - Start the GemFire locator
 
