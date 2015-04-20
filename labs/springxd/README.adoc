@@ -367,16 +367,16 @@ Cluster configuration service is up and running.
 - Start a GemFire server
 [source,bash]
 ----
-gfsh>start server --name=server1 --J=-Dgemfire.start-dev-rest-api=true --J=-Dgemfire.http-service-port=8080
-Starting a GemFire Server in /home/gpadmin/BigDataRoadshow/server1...
--
-Server in /home/gpadmin/BigDataRoadshow/server1 on ip-172-31-18-42.ec2.internal[40404] as server1 is currently online.
-Process ID: 46391
-Uptime: 7 seconds
+gfsh>start server --name=server1 --J=-Dgemfire.start-dev-rest-api=true --J=-Dgemfire.http-service-port=7676
+Starting a GemFire Server in /home/gpadmin/Desktop/server1...
+.............
+Server in /home/gpadmin/Desktop/server1 on ip-172-31-44-219.ec2.internal[40404] as server1 is currently online.
+Process ID: 16646
+Uptime: 6 seconds
 GemFire Version: 8.1.0
 Java Version: 1.7.0_45
-Log File: /home/gpadmin/BigDataRoadshow/server1/server1.log
-JVM Arguments: -Dgemfire.default.locators=172.31.18.42[10334] -Dgemfire.use-cluster-configuration=true -Dgemfire.start-dev-rest-api=true -Dgemfire.http-service-port=8080 -XX:OnOutOfMemoryError=kill -KILL %p -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
+Log File: /home/gpadmin/Desktop/server1/server1.log
+JVM Arguments: -Dgemfire.default.locators=172.31.44.219[10334] -Dgemfire.use-cluster-configuration=true -Dgemfire.start-dev-rest-api=true -Dgemfire.http-service-port=7676 -XX:OnOutOfMemoryError=kill -KILL %p -Dgemfire.launcher.registerSignalHandlers=true -Djava.awt.headless=true -Dsun.rmi.dgc.server.gcInterval=9223372036854775806
 Class-Path: /opt/pivotal/gemfire/Pivotal_GemFire_810/lib/gemfire.jar:/opt/pivotal/gemfire/Pivotal_GemFire_810/lib/server-dependencies.jar
 ----
  - Create a GemFire region for storing the data sent from Spring XD
@@ -425,7 +425,7 @@ Region | size | 1
 ----
 
 As we can see, there's one value in, which we can easily verify using the GemFire's REST API:
-link:http://localhost:8888/gemfire-api/v1/ValuesFromXD[http://localhost:8888/gemfire-api/v1/ValuesFromXD]
+link:http://localhost:7676/gemfire-api/v1/ValuesFromXD[http://localhost:7676/gemfire-api/v1/ValuesFromXD]
 
 ----
 {
