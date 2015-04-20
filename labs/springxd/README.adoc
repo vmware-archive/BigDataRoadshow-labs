@@ -437,8 +437,16 @@ link:http://localhost:8888/gemfire-api/v1/ValuesFromXD[http://localhost:8888/gem
   } ]
 }
 ----
+Before moving on to HAWQ, lets shut down Gemfire.
 
+----
+gfsh>shutdown --include-locators=true
+As a lot of data in memory will be lost, including possibly events in queues, do you really want to shutdown the entire distributed system? (Y/n): Y
+Shutdown is triggered
 
+gfsh>
+No longer connected to ip-172-31-44-219.ec2.internal[1099].
+----
 
 === Quering from HAWQ
 
