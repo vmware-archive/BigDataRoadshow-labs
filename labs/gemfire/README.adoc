@@ -52,7 +52,7 @@ All instructions assume commands are being executed in gfsh and also that gfsh w
 To get this folder do the following: +
 [source]
 ----
-[pivhdsne:Desktop]$ cd BigDataRoadshow
+[pivhdsne:Desktop]$ cd BigDataRoadshow-labs
 [pivhdsne:BigDataRoadshow]$ cd labs/
 [pivhdsne:labs]$ ls
 01-gemfire  01-gemfire.adoc  02-phd-hawq  03-springxd  preparing_labs.pptx
