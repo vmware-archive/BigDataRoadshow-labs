@@ -262,7 +262,7 @@ Note the created *xd* directory, where Spring XD will output the streams created
 
 Let's modify the previous stream to output to HDFS instead. We could just output the stream as-is to HDFS, but we'll convert it to CSV in order to be able to read with HAWQ.
 
-=== Creating a simple transformer in groovy:
+=== Creating a simple transformer in groovy
 
 Create the file _transform.groovy_ in your lab directory. This can be down with the following command: +
 [source,groovy]
@@ -467,8 +467,14 @@ No longer connected to ip-172-31-44-219.ec2.internal[1099].
 
 === Quering from HAWQ
 
-We will now create a table that can query the data that is being written to HDFS
+We will now create a table that can query the data that is being written to HDFS. +
+Open a terminal session and type in the command:
+[source, bash]
+----
+psql
+----
 
+With in the psql terminal session, paste the follwing SQL. +
 [source,sql]
 ----
 CREATE EXTERNAL TABLE test (
