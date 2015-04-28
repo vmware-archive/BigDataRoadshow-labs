@@ -16,7 +16,7 @@ http://cord.sourceforge.net/
 For Windows the included Remote Desktop Connection can be used: 
 http://windows.microsoft.com/en-ca/windows/connect-using-remote-desktop-connection#connect-using-remote-desktop-connection=windows-7
 
-The username and password for the AMI image is gpadmin/bebold.+
+The username and password for the AMI image is gpadmin/bebold. +
 
 === Starting Spring XD
 
