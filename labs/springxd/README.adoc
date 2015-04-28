@@ -262,7 +262,7 @@ Note the created *xd* directory, where Spring XD will output the streams created
 
 Let's modify the previous stream to output to HDFS instead. We could just output the stream as-is to HDFS, but we'll convert it to CSV in order to be able to read with HAWQ.
 
-Creating a simple transformer in groovy:
+* Creating a simple transformer in groovy:
 
 Create the file _transform.groovy_ in your lab directory. This can be down with the following command: +
 [source,groovy]
