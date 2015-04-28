@@ -264,8 +264,17 @@ Let's modify the previous stream to output to HDFS instead. We could just output
 
 Creating a simple transformer in groovy:
 
-Create the file _transform.groovy_ in your lab directory with the contents below:
- +
+Create the file _transform.groovy_ in your lab directory. This can be down with the following command: +
+[source,groovy]
+----
+touch transform.groovy
+----
+Next open the file for editing in gedit with the following command in the terminal. +
+[source,groovy]
+----
+gedit transform.groovy
+----
+Finally paste the groovy script below into the file. Ensure to click the Save icon before closing gedit. +
 [source,groovy]
 ----
 csv = payload.get('X')+','+payload.get('Y')+','+payload.get('Z')+","+payload.get('key')
