@@ -7,7 +7,7 @@ Requirements
 
 - PHD+HAWQ SingleNode installation ( available at network.pivotal.io )
 
-If you are working with the Amazon Image (AMI:ami-aaf1dac2) a remote desktop client that supports a RDP connection is required. +
+If you are working with the Amazon Image (AMI:ami-aaf1dac2) a remote desktop client that supports an RDP connection may be required. +
 
 For Mac OSX CoRD is reccommended. CoRD is free to download and can be obtained from this site: http://cord.sourceforge.net/
 
