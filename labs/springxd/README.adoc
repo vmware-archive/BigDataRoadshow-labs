@@ -9,14 +9,13 @@ Pre-Requisites
 - http://pivotal.io/big-data/pivotal-gemfire[GemFire] v8.1+ installed
 - http://pivotal.io/big-data/pivotal-hd[PHD+Hawq] v2.1+  installed
 
-If you are working with the Amazon Image (AMI:ami-aaf1dac2) a remote desktop client that supports a RDP connection is required. +
-For Mac OSX CoRD is reccommended. CoRD is free to download and can be obtained from this site:
-http://cord.sourceforge.net/ +
+If you are working with the Amazon Image (AMI:ami-aaf1dac2) a remote desktop client that supports an RDP connection may be required.
 
-For Windows the included Remote Desktop Connection can be used: 
-http://windows.microsoft.com/en-ca/windows/connect-using-remote-desktop-connection#connect-using-remote-desktop-connection=windows-7 +
+For Mac OSX CoRD is reccommended. CoRD is free to download and can be obtained from this site: http://cord.sourceforge.net/
 
-The username and password for the AMI image is gpadmin/bebold. +
+For Windows the included Remote Desktop Connection can be used: http://windows.microsoft.com/en-ca/windows/connect-using-remote-desktop-connection#connect-using-remote-desktop-connection=windows-7
+
+The username and password for the AMI image is gpadmin/bebold.
 
 === Starting Spring XD
 
