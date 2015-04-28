@@ -3,30 +3,16 @@
 The purpose of this lab is to get a basic understanding of how a Gemfire cluster works and how it can be used.
 
 == Prerequisites
-=== AWS Workspace Set Up
-If you are using the Big Data Roadshow VM, this step has already been completed. In this case, proceed to the next step. +
-For AWS, the BigDataShow workspace needs to be set up. +
-To get this project, run the following command in the terminal. To make things easier, start this terminal session from the Desktop. +
-_Tip:_ To easily start a terminal session, right click on the desktop and select 'Open in Terminal'. +
-[source]
-----
-git clone https://github.com/Pivotal-Field-Engineering/BigDataRoadshow.git
-----
-The output will look something like this:
-[source]
-----
-[pivhdsne:Desktop]$ git clone https://github.com/Pivotal-Field-Engineering/BigDataRoadshow.git
-git: /usr/local/hawq/./lib/libz.so.1: no version information available (required by git)
-Initialized empty Git repository in /home/gpadmin/Desktop/BigDataRoadshow/.git/
-git-remote-https: /usr/local/hawq/./lib/libz.so.1: no version information available (required by git-remote-https)
-git: /usr/local/hawq/./lib/libz.so.1: no version information available (required by git)
-remote: Counting objects: 563, done.
-remote: Compressing objects: 100% (17/17), done.
-git: /usr/local/hawq/./lib/libz.so.1: no version information available (required by git)
-remote: Total 563 (delta 8), reused 0 (delta 0), pack-reused 546
-Receiving objects: 100% (563/563), 21.51 MiB | 22.16 MiB/s, done.
-Resolving deltas: 100% (353/353), done.
-----
+Required Pivotal Products: +
+- Gemfire 8.1
+
+If you are working with the Amazon Image (AMI:ami-aaf1dac2) a remote desktop client that supports an RDP connection may be required.
+
+For Mac OSX CoRD is reccommended. CoRD is free to download and can be obtained from this site: http://cord.sourceforge.net/
+
+For Windows the included Remote Desktop Connection can be used: http://windows.microsoft.com/en-ca/windows/connect-using-remote-desktop-connection#connect-using-remote-desktop-connection=windows-7
+
+The username and password for the AMI image is gpadmin/bebold.
 
 === Setting up the terminal session
 All instructions assume that the terminal session is started in the labs directory of the roadshow project. +
