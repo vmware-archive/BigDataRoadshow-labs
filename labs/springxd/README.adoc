@@ -264,7 +264,12 @@ Let's modify the previous stream to output to HDFS instead. We could just output
 
 === Creating a simple transformer in groovy
 
-Create the file _transform.groovy_ in your lab directory. This can be down with the following command: +
+Create the file _transform.groovy_ in your lab directory.
+[source,bash]
+----
+cd /home/gpadmin/Desktop/BigDataRoadshow-labs/labs
+----
+The file can be created with the following command: +
 [source,groovy]
 ----
 touch transform.groovy
