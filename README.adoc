@@ -26,7 +26,7 @@ So far this consists of:
 == Environment
 
 The labs are built for running on any environment with the right products installed.  
-In order to make it simpler, we've created the Amazon public AMI *ami-aaf1dac2* (gpadmin/bebold) . 
+In order to make it simpler, we've created the Amazon public AMI *ami-c42301ac* (gpadmin/bebold) . 
 
 
 This AMI can be used to provision new instances that are ready to run those labs. Make sure you get 16Gb of memory for your AMI (recommended EC2 instance type: m3.xlarge) 
