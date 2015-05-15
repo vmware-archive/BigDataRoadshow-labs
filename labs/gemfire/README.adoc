@@ -28,7 +28,7 @@ gemfire  phd-hawq  preparing_labs.pdf  springxd
 
 === Open up the labs instructions
 Ensure the lab instructions are open in a browser window: +
-https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/blob/master/labs/01-gemfire.adoc +
+https://github.com/Pivotal-Field-Engineering/BigDataRoadshow/labs/README.adoc +
 
 
 == Exploring gfsh
