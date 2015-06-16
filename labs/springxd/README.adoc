@@ -23,6 +23,7 @@ Start a single node instance of Spring XD, typing on a terminal:
 
 [source,bash]
 ----
+$ git clone https://github.com/Pivotal-Field-Engineering/BigDataRoadshow-labs /home/gpadmin/Desktop/BigDataRoadshow-labs
 $ export JAVA_OPTS="-XX:PermSize=512m"
 $ xd-singlenode
 
