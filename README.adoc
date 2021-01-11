@@ -1,4 +1,6 @@
-= Pivotal Big Data Roadshow  - Hands-on Technical Workshop
+= VMware has ended active development of this project, this repository will no longer be updated.
+
+Pivotal Big Data Roadshow  - Hands-on Technical Workshop
 
 Lab content for the Pivotal Big Data Roadshow (http://pivotal.io/big-data/data-roadshow).
 
